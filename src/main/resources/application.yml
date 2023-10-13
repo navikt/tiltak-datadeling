@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: tiltak-datadeling
+  main:
+    banner-mode: "off"
+
+management:
+  endpoints:
+    web:
+      base-path: /internal/
+      exposure:
+        include: info, health, metrics, prometheus
