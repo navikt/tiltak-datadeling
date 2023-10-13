@@ -2,9 +2,9 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: tiltak-datadeling
-  namespace: teamtiltak
+  namespace: team-tiltak
   labels:
-    team: teamtiltak
+    team: team-tiltak
 spec:
   env:
     - name: MILJO
@@ -12,7 +12,6 @@ spec:
   kafka:
     pool: nav-dev
   image: {{image}}
-  team: teamtiltak
   port: 8080
   liveness:
     path: /internal/health/liveness
@@ -29,8 +28,6 @@ spec:
   ingresses:
     - https://tiltak-datadeling.intern.dev.nav.no/
   leaderElection: true
-  vault:
-    enabled: true
   strategy:
     type: RollingUpdate
   prometheus:
