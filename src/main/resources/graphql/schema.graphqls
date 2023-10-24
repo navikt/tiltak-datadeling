@@ -1,0 +1,23 @@
+
+"""
+Avtale om tiltak
+"""
+type Avtale {
+    "UUID'en til avtalen"
+    id: ID!
+    "Avtalenummeret"
+    avtaleNr: Int!
+    "Løpenummer; brukes om tilskuddsperioder"
+    lopenummer: Int!
+    "Når avtalen startet opp. Definert som en datostreng"
+    startDato: String
+}
+
+type Query {
+    "Søk etter avtaler tilknyttet en person"
+    avtalerForPerson(personnummer: String): [Avtale]!
+    "Søk etter avtaler tilknyttet en bedrift"
+    avtalerForBedrift(organisasjonsnummer: String): [Avtale]!
+    "Søk etter avtaler ved uuid"
+    avtale(avtaleId: ID): Avtale
+}
