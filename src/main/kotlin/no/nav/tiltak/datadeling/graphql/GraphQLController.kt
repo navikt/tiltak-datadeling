@@ -1,6 +1,7 @@
 package no.nav.tiltak.datadeling.graphql
 
 import graphql.GraphQLContext
+import graphql.schema.DataFetchingEnvironment
 import no.nav.tiltak.datadeling.domene.Avtale
 import no.nav.tiltak.datadeling.domene.AvtaleRepository
 import org.springframework.graphql.data.method.annotation.Argument
@@ -22,7 +23,8 @@ class GraphQLController(val avtaleRepository: AvtaleRepository) {
     }
 
     @QueryMapping
-    fun avtale(context: GraphQLContext, @Argument avtaleId: String): Avtale? {
+    fun avtale(dataFetchingEnvironment: DataFetchingEnvironment, context: GraphQLContext, @Argument avtaleId: String): Avtale? {
+        dataFetchingEnvironment
         val alleredeFunnetAvtale: Avtale? = context.get(avtaleId)
         return if (alleredeFunnetAvtale == null) {
             val hentetAvtale = avtaleRepository.hentAvtale(avtaleId).also {
