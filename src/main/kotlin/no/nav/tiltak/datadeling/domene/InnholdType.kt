@@ -1,0 +1,16 @@
+package no.nav.tiltak.datadeling.domene
+
+enum class InnholdType {
+    INNGÅ,
+    LÅSE_OPP,
+    FORLENGE,
+    FORKORTE,
+    ENDRE_MÅL,
+    ENDRE_INKLUDERINGSTILSKUDD,
+    ENDRE_OM_MENTOR,
+    ENDRE_TILSKUDDSBEREGNING,
+    ENDRE_STILLING,
+    ENDRE_KONTAKTINFO,
+    ENDRE_OPPFØLGING_OG_TILRETTELEGGING,
+    ANNULLERE
+}
