@@ -6,12 +6,14 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.tiltak.datadeling.domene.Avtale
 import no.nav.tiltak.datadeling.db.AvtaleRepository
 import org.apache.kafka.common.TopicPartition
+import org.springframework.context.annotation.Profile
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.listener.ConsumerSeekAware
 import org.springframework.stereotype.Component
 
 const val AVTALE_HENDELSE_COMPACT = "arbeidsgiver.tiltak-avtale-hendelse-compact"
 
+@Profile("!local")
 @Component
 class TiltakHendelseKafkaKonsument(
     val avtaleRepository: AvtaleRepository
