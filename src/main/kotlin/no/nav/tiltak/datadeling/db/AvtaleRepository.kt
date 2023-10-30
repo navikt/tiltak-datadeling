@@ -1,9 +1,11 @@
 package no.nav.tiltak.datadeling.db
 
 import no.nav.tiltak.datadeling.domene.Avtale
+import no.nav.tiltak.datadeling.domene.Tiltakstype
+import no.nav.tiltak.datadeling.graphql.AvtaleStatusGQL
+import no.nav.tiltak.datadeling.graphql.map
 import org.springframework.stereotype.Repository
 import java.util.*
-import kotlin.collections.ArrayList
 
 @Repository
 class AvtaleRepository {
@@ -22,7 +24,19 @@ class AvtaleRepository {
 
     fun hentAvtale(uuid: String): Avtale? {
         println("HENTER AVTALE ${uuid}")
-        return avtaler.find { it.avtaleId == UUID.fromString(uuid) }
+        return avtaler.sortedBy { it.versjon }.findLast { it.avtaleId == UUID.fromString(uuid) }
+    }
+
+    fun hentAvtaleForTiltakstype(tiltakstype: Tiltakstype, status: AvtaleStatusGQL?): List<Avtale> {
+        println("HENTER AVTALER FOR TILTAKSTYPE $tiltakstype")
+        if (status != null) {
+            return avtaler.filter {
+                it.tiltakstype == tiltakstype && map(it.avtaleStatus) == status
+            }
+        } else {
+            return avtaler.filter { it.tiltakstype == tiltakstype }
+
+        }
     }
 
     fun save(avtale: Avtale) {

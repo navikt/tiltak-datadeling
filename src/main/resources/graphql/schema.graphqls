@@ -277,4 +277,6 @@ type Query {
     avtalerForBedrift(organisasjonsnummer: String): [Avtale]!
     "Søk etter avtaler ved uuid"
     avtale(avtaleId: ID): Avtale
+    "Søk etter avtaler på tiltakstype"
+    avtalerForTiltakstype(tiltakstype: Tiltakstype, status: AvtaleStatus): [Avtale]!
 }
