@@ -1,2 +1,125 @@
 # tiltak-datadeling
 API for deling av team tiltak-data internt i Nav
+
+## Eksempel på Graphql-spørring
+
+```graphql
+{
+  avtalerForBedrift(organisasjonsnummer: "910825526") {
+    avtaleId
+    avtaleNr
+    opprettetTidspunkt
+    sistEndret
+    bedriftNr
+    deltakerFnr
+    mentorFnr
+    veilederNavIdent
+    enhetGeografisk
+    enhetsnavnGeografisk
+    enhetOppfolging
+    enhetsnavnOppfolging
+    hendelseType
+    avtaleStatus
+    tiltakstype
+    annullertTidspunkt
+    annullertGrunn
+    slettemerket
+    opprettetAvArbeidsgiver
+    godkjentForEtterregistrering
+    kvalifiseringsgruppe
+    formidlingsgruppe
+    feilregistrert
+    versjon
+    deltakerFornavn
+    deltakerEtternavn
+    deltakerTlf
+    bedriftNavn
+    arbeidsgiverFornavn
+    arbeidsgiverEtternavn
+    arbeidsgiverTlf
+    veilederFornavn
+    veilederEtternavn
+    veilederTlf
+    oppfolging
+    tilrettelegging
+    sluttDato
+    startDato
+    stillingprosent
+    journalpostId
+    arbeidsoppgaver
+    stillingstittel
+    stillingStyrk08
+    stillingKonseptId
+    antallDagerPerUke
+    refusjonKontaktperson {
+      refusjonKontaktpersonFornavn
+      refusjonKontaktpersonEtternavn
+      refusjonKontaktpersonTlf
+      onskerVarslingOmRefusjon
+    }
+    mentorFornavn
+    mentorEtternavn
+    mentorOppgaver
+    mentorAntallTimer
+    mentorTimelonn
+    mentorTlf
+    arbeidsgiverKontonummer
+    lonnstilskuddProsent
+    manedslonn
+    feriepengesats
+    arbeidsgiveravgift
+    harFamilietilknytning
+    familietilknytningForklaring
+    feriepengerBelop
+    otpSats
+    otpBelop
+    arbeidsgiveravgiftBelop
+    sumLonnsutgifter
+    sumLonnstilskudd
+    manedslonn100pst
+    sumLonnstilskuddRedusert
+    datoForRedusertProsent
+    stillingstype
+    maal {
+      id
+      kategori
+      beskrivelse
+    }
+    inkluderingstilskuddsutgift {
+      id
+      belop
+      type
+    }
+    inkluderingstilskuddBegrunnelse
+    inkluderingstilskuddTotalBelop
+    godkjentAvDeltaker
+    godkjentTaushetserklaeringAvMentor
+    godkjentAvArbeidsgiver
+    godkjentAvVeileder
+    godkjentAvBeslutter
+    avtaleInngaatt
+    ikrafttredelsestidspunkt
+    godkjentAvNavIdent
+    godkjentAvBeslutterNavIdent
+    enhetKostnadssted
+    enhetsnavnKostnadssted
+    godkjentPaVegneGrunn {
+      ikkeBankId
+      reservert
+      digitalKompetanse
+      arenaMigreringDeltaker
+    }
+    godkjentPaVegneAv
+    godkjentPaVegneAvArbeidsgiverGrunn {
+      klarerIkkeGiFaTilgang
+      vetIkkeHvemSomKanGiTilgang
+      farIkkeTilgangPersonvern
+      arenaMigreringArbeidsgiver
+    }
+    godkjentPaVegneAvArbeidsgiver
+    innholdType
+    utfortAv
+    utfortAvRolle
+  }
+}
+```
