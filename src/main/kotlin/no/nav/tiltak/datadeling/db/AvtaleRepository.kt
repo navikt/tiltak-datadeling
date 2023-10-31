@@ -22,9 +22,13 @@ class AvtaleRepository {
         return avtaler.filter { it.deltakerFnr == personnummer }
     }
 
-    fun hentAvtale(uuid: String): Avtale? {
+    fun hentAvtale(uuid: String?, avtaleNr: Int?): Avtale? {
         println("HENTER AVTALE ${uuid}")
-        return avtaler.sortedBy { it.versjon }.findLast { it.avtaleId == UUID.fromString(uuid) }
+        return avtaler.sortedBy { it.versjon }
+            .filter { if (uuid == null) true else it.avtaleId == UUID.fromString(uuid) }
+            .filter { if (avtaleNr == null) true else it.avtaleNr == avtaleNr }
+            .last()
+
     }
 
     fun hentAvtaleForTiltakstype(tiltakstype: Tiltakstype, status: AvtaleStatusGQL?): List<Avtale> {

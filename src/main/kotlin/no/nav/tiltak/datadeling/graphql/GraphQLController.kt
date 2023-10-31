@@ -23,19 +23,8 @@ class GraphQLController(val avtaleRepository: AvtaleRepository) {
     }
 
     @QueryMapping
-    fun avtale(context: GraphQLContext, @Argument avtaleId: String): AvtaleGQL? {
-        val alleredeFunnetAvtale: Avtale? = context.get(avtaleId)
-        val avtale = if (alleredeFunnetAvtale == null) {
-            val hentetAvtale = avtaleRepository.hentAvtale(avtaleId).also {
-                if (it != null) {
-                    context.put(it.avtaleId, it)
-                }
-            }
-            hentetAvtale
-        } else {
-            alleredeFunnetAvtale
-        }
-        return avtale?.let { map(it) }
+    fun avtale(context: GraphQLContext, @Argument avtaleId: String?, @Argument avtaleNr: Int?): AvtaleGQL? {
+        return avtaleRepository.hentAvtale(avtaleId, avtaleNr)?.let { map(it) }
     }
 
     @QueryMapping
