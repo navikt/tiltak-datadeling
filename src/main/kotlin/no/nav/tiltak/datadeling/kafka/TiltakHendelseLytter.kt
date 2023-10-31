@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.tiltak.datadeling.domene.Avtale
 import no.nav.tiltak.datadeling.db.AvtaleRepository
 import org.apache.kafka.common.TopicPartition
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.listener.ConsumerSeekAware
@@ -18,6 +19,7 @@ const val AVTALE_HENDELSE_COMPACT = "arbeidsgiver.tiltak-avtale-hendelse-compact
 class TiltakHendelseKafkaKonsument(
     val avtaleRepository: AvtaleRepository
 ) : ConsumerSeekAware {
+    val log = LoggerFactory.getLogger(javaClass)
     val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
         .registerModules(JavaTimeModule())
 
@@ -27,7 +29,7 @@ class TiltakHendelseKafkaKonsument(
             val avtale = mapper.readValue(data, Avtale::class.java)
             avtaleRepository.save(avtale)
         } catch (e: Exception) {
-            println("Feil oppstod ved henting av kafkamelding ${e.message}")
+            log.error("Feil oppstod ved henting av kafkamelding")
         }
     }
 

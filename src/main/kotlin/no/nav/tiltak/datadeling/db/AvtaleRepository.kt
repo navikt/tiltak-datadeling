@@ -4,35 +4,36 @@ import no.nav.tiltak.datadeling.domene.Avtale
 import no.nav.tiltak.datadeling.domene.Tiltakstype
 import no.nav.tiltak.datadeling.graphql.AvtaleStatusGQL
 import no.nav.tiltak.datadeling.graphql.map
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
 class AvtaleRepository {
 
+    val log = LoggerFactory.getLogger(javaClass)
     var avtaler: ArrayList<Avtale> = ArrayList()
 
     fun hentAvtaleForBedrift(bedriftnummer: String): List<Avtale> {
-        println("HENTER AVTALER FOR BEDRIFT ${bedriftnummer}")
+        log.info("Henter avtaler for bedrift $bedriftnummer")
         return avtaler.filter { it.bedriftNr == bedriftnummer }
     }
 
     fun hentAvtaleForPerson(personnummer: String): List<Avtale> {
-        println("HENTER AVTALER FOR PERSON ${personnummer}")
+        log.info("Henter avtaler for person")
         return avtaler.filter { it.deltakerFnr == personnummer }
     }
 
-    fun hentAvtale(uuid: String?, avtaleNr: Int?): Avtale? {
-        println("HENTER AVTALE ${uuid}")
+    fun hentAvtale(avtaleId: String?, avtaleNr: Int?): Avtale? {
+        log.info("Henter avtale med avtaleId: $avtaleId, avtaleNr: $avtaleNr")
         return avtaler.sortedBy { it.versjon }
-            .filter { if (uuid == null) true else it.avtaleId == UUID.fromString(uuid) }
+            .filter { if (avtaleId == null) true else it.avtaleId == UUID.fromString(avtaleId) }
             .filter { if (avtaleNr == null) true else it.avtaleNr == avtaleNr }
             .last()
-
     }
 
     fun hentAvtaleForTiltakstype(tiltakstype: Tiltakstype, status: AvtaleStatusGQL?): List<Avtale> {
-        println("HENTER AVTALER FOR TILTAKSTYPE $tiltakstype")
+        log.info("Henter avtaler for tiltakstype $tiltakstype")
         if (status != null) {
             return avtaler.filter {
                 it.tiltakstype == tiltakstype && map(it.avtaleStatus) == status
