@@ -1,0 +1,40 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: "tiltak-datadeling"
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties:
+      security.protocol: PLAINTEXT
+      ssl:
+        keystore: null
+        truststore: null
+  application:
+    name: tiltak-datadeling
+  main:
+    banner-mode: "off"
+  graphql:
+    path: '/graphql'
+    #TODO deaktiver graphiql? Iallefall i prod?
+    graphiql:
+      enabled: true
+      path: '/graphiql'
+management:
+  endpoints:
+    web:
+      base-path: /internal/
+      exposure:
+        include: info, health, metrics, prometheus
+
+tiltak-datadeling:
+  kafka:
+    topic: arbeidsgiver.tiltak-avtale-hendelse-compact
+  opensearch:
+    index: avtale
+    urlString: https://localhost:9200
+    username: admin
+    password: admin

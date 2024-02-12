@@ -1,33 +1,33 @@
 package no.nav.tiltak.datadeling.kafka
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.tiltak.datadeling.domene.Avtale
-import no.nav.tiltak.datadeling.db.AvtaleRepository
+import no.nav.tiltak.datadeling.graphql.map
+import no.nav.tiltak.datadeling.opensearch.OpenSearchConnector
 import org.apache.kafka.common.TopicPartition
 import org.slf4j.LoggerFactory
-import org.springframework.context.annotation.Profile
+import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.listener.ConsumerSeekAware
 import org.springframework.stereotype.Component
 
 const val AVTALE_HENDELSE_COMPACT = "arbeidsgiver.tiltak-avtale-hendelse-compact"
 
-@Profile("!local")
+//@Profile("!local")
 @Component
+@EnableKafka
 class TiltakHendelseKafkaKonsument(
-    val avtaleRepository: AvtaleRepository
+    val mapper: ObjectMapper,
+    val openSearchConnector: OpenSearchConnector
 ) : ConsumerSeekAware {
     val log = LoggerFactory.getLogger(javaClass)
-    val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
-        .registerModules(JavaTimeModule())
 
     @KafkaListener(topics = [AVTALE_HENDELSE_COMPACT])
     fun avtaleHendelseLytter(data: String) {
         try {
+            log.info("Mottatt melding på topic")
             val avtale = mapper.readValue(data, Avtale::class.java)
-            avtaleRepository.save(avtale)
+            openSearchConnector.save(map(avtale))
         } catch (e: Exception) {
             log.error("Feil oppstod ved henting av kafkamelding")
         }

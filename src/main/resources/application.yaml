@@ -21,13 +21,20 @@ spring:
     banner-mode: "off"
   graphql:
     path: '/graphql'
-    #TODO deaktiver graphiql? Iallefall i prod?
     graphiql:
-      enabled: true
-      path: '/graphiql'
+      enabled: false
 management:
   endpoints:
     web:
       base-path: /internal/
       exposure:
         include: info, health, metrics, prometheus
+
+tiltak-datadeling:
+  kafka:
+    topic: arbeidsgiver.tiltak-avtale-hendelse-compact
+  opensearch:
+    index: avtale
+    url: ${OPEN_SEARCH_URI}
+    username: ${OPEN_SEARCH_USERNAME}
+    password: ${OPEN_SEARCH_PASSWORD}
