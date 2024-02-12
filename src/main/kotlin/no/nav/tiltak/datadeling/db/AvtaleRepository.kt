@@ -14,16 +14,6 @@ class AvtaleRepository {
     val log = LoggerFactory.getLogger(javaClass)
     var avtaler: ArrayList<Avtale> = ArrayList()
 
-    fun hentAvtaleForBedrift(bedriftnummer: String): List<Avtale> {
-        log.info("Henter avtaler for bedrift $bedriftnummer")
-        return avtaler.filter { it.bedriftNr == bedriftnummer }
-    }
-
-    fun hentAvtaleForPerson(personnummer: String): List<Avtale> {
-        log.info("Henter avtaler for person")
-        return avtaler.filter { it.deltakerFnr == personnummer }
-    }
-
     fun hentAvtale(avtaleId: String?, avtaleNr: Int?): Avtale? {
         log.info("Henter avtale med avtaleId: $avtaleId, avtaleNr: $avtaleNr")
         return avtaler.sortedBy { it.versjon }

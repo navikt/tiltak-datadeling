@@ -1,0 +1,16 @@
+spring:
+  kafka: null
+  graphql:
+    path: '/graphql'
+    graphiql:
+      enabled: true
+      path: '/graphiql'
+
+tiltak-datadeling:
+  kafka:
+    topic: arbeidsgiver.tiltak-avtale-hendelse-compact
+  opensearch:
+    index: test-index
+    url: dummy
+    username: dummy
+    password: dummy

@@ -1,25 +1,28 @@
 package no.nav.tiltak.datadeling.graphql
 
 import graphql.GraphQLContext
+import graphql.language.Field
+import graphql.schema.DataFetchingEnvironment
 import no.nav.tiltak.datadeling.db.AvtaleRepository
-import no.nav.tiltak.datadeling.domene.Avtale
-import no.nav.tiltak.datadeling.domene.AvtaleStatus
 import no.nav.tiltak.datadeling.domene.Tiltakstype
+import no.nav.tiltak.datadeling.opensearch.OpenSearchConnector
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.stereotype.Controller
 
 @Controller
-class GraphQLController(val avtaleRepository: AvtaleRepository) {
+class GraphQLController(val avtaleRepository: AvtaleRepository, val openSearchConnector: OpenSearchConnector) {
 
     @QueryMapping
-    fun avtalerForPerson(context: GraphQLContext, @Argument personnummer: String): List<AvtaleGQL> {
-        return avtaleRepository.hentAvtaleForPerson(personnummer).map { map(it) }
+    fun avtalerForPerson(dataFetchingEnvironment: DataFetchingEnvironment, @Argument personnummer: String): List<AvtaleGQL> {
+        val minimering = dataFetchingEnvironment.field.selectionSet.selections.map { (it as Field).name }
+        return openSearchConnector.hentAvtale(mapOf("deltakerFnr" to personnummer), minimering)
     }
 
     @QueryMapping
-    fun avtalerForBedrift(@Argument organisasjonsnummer: String): List<AvtaleGQL> {
-        return avtaleRepository.hentAvtaleForBedrift(organisasjonsnummer).map { map(it) }
+    fun avtalerForBedrift(dataFetchingEnvironment: DataFetchingEnvironment, @Argument organisasjonsnummer: String): List<AvtaleGQL> {
+        val minimering = dataFetchingEnvironment.field.selectionSet.selections.map { (it as Field).name }
+        return openSearchConnector.hentAvtale(mapOf("bedriftNr" to organisasjonsnummer), minimering)
     }
 
     @QueryMapping
