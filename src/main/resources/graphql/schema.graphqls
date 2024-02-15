@@ -278,5 +278,7 @@ type Query {
     "Søk etter avtale"
     avtale(avtaleId: ID, avtaleNr: Int): Avtale
     "Søk etter avtaler på tiltakstype"
-    avtalerForTiltakstype(tiltakstype: Tiltakstype, status: AvtaleStatus): [Avtale]!
+    avtalerForTiltakstype(tiltakstype: Tiltakstype): [Avtale]!
+    "Søk etter avtaler på status"
+    avtalerForStatus(status: AvtaleStatus): [Avtale]!
 }
