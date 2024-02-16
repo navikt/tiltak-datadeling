@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.nais/opensearch-dev.yaml'
+      - 'nais/opensearch-dev.yaml'
       - '.github/workflows/deploy-opensearch.yaml'
   workflow_dispatch:
 
@@ -21,4 +21,4 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          RESOURCE: .nais/opensearch-dev.yaml
+          RESOURCE: nais/opensearch-dev.yaml
