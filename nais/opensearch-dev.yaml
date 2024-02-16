@@ -1,0 +1,10 @@
+apiVersion: aiven.io/v1alpha1
+kind: OpenSearch
+metadata:
+  labels:
+    team: team-tiltak
+  name: opensearch-team-tiltak-datadeling
+  namespace: team-tiltak
+spec:
+  plan: startup-4
+  project: nav-dev
