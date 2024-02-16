@@ -22,7 +22,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 
-@Profile(value = ["prod", "dockercompose"])
+@Profile(value = ["prod-gcp", "dev-gcp", "dockercompose"])
 @Configuration
 @EnableConfigurationProperties(OpenSearchProperties::class)
 class OpenSearchConfig {
