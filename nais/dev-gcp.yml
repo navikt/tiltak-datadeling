@@ -33,3 +33,14 @@ spec:
   prometheus:
     enabled: true
     path: /internal/prometheus
+  azure:
+    application:
+      enabled: true
+    sidecar:
+      enabled: true
+  accessPolicy:
+    inbound:
+      rules:
+        - application: wonderwalled-azure
+          namespace: aura
+          cluster: dev-gcp
