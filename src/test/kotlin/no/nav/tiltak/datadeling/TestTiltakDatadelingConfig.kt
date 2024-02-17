@@ -18,9 +18,12 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
-import org.springframework.test.context.ActiveProfiles
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
+import org.springframework.kafka.core.ConsumerFactory
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.utility.DockerImageName
+
 
 @Profile("!dockercompose")
 @TestConfiguration(proxyBeanMethods = false)
@@ -59,6 +62,23 @@ class TestTiltakDatadelingConfig {
         props[KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         return KafkaConsumer<String, String>(props)
+    }
+
+    @Bean
+    fun kafkaConsumerFactory(kafkaContainer: KafkaContainer): ConsumerFactory<String, String> {
+        val props: MutableMap<String, Any> = HashMap()
+        props[BOOTSTRAP_SERVERS_CONFIG] = kafkaContainer.bootstrapServers
+        props[AUTO_OFFSET_RESET_CONFIG] = "earliest"
+        props[GROUP_ID_CONFIG] = "tiltak"
+        props[KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
+        props[VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
+        return DefaultKafkaConsumerFactory(props)
+    }
+    @Bean
+    fun kafkaListenerContainerFactory(consumerFactory: ConsumerFactory<String, String>): ConcurrentKafkaListenerContainerFactory<String, String> {
+        val factory = ConcurrentKafkaListenerContainerFactory<String, String>()
+        factory.consumerFactory = consumerFactory
+        return factory
     }
 
     @Bean
