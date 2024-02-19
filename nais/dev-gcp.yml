@@ -47,4 +47,4 @@ spec:
         - application: wonderwalled-azure
           namespace: aura
           cluster: dev-gcp
-  webproxy: true
+  webproxy: false
