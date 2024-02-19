@@ -19,7 +19,6 @@ spring:
     banner-mode: "off"
   graphql:
     path: '/graphql'
-    #TODO deaktiver graphiql? Iallefall i prod?
     graphiql:
       enabled: true
       path: '/graphiql'

@@ -1,12 +1,10 @@
 package no.nav.tiltak.datadeling
 
-import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import kotlin.system.exitProcess
 
 @SpringBootApplication
-@EnableJwtTokenValidation
 class TiltakDatadelingApplication
 
 fun main(args: Array<String>) {
