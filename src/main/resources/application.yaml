@@ -30,6 +30,12 @@ management:
       exposure:
         include: info, health, metrics, prometheus
 
+no.nav.security.jwt:
+  issuer:
+    aad:
+      discoveryurl: ${AZURE_APP_WELL_KNOWN_URL}
+      accepted_audience: ${AZURE_APP_CLIENT_ID}
+
 tiltak-datadeling:
   kafka:
     topic: arbeidsgiver.tiltak-avtale-hendelse-compact
