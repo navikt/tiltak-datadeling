@@ -2,7 +2,6 @@ package no.nav.tiltak.datadeling.graphql
 
 import graphql.language.Field
 import graphql.schema.DataFetchingEnvironment
-import no.nav.security.token.support.core.api.Protected
 import no.nav.tiltak.datadeling.domene.Tiltakstype
 import no.nav.tiltak.datadeling.opensearch.OpenSearchConnector
 import org.springframework.graphql.data.method.annotation.Argument
@@ -10,7 +9,6 @@ import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.stereotype.Controller
 
 @Controller
-@Protected
 class GraphQLController(val openSearchConnector: OpenSearchConnector) {
 
     @QueryMapping

@@ -32,17 +32,4 @@ class TiltakHendelseKafkaKonsument(
             log.error("Feil oppstod ved henting av kafkamelding")
         }
     }
-
-    /**
-     * Når vi blir assigned til en partisjon, spol tilbake til start for å kverne igjennom all data på ny
-     */
-    @Override
-    override fun onPartitionsAssigned(
-        assignments: Map<TopicPartition, Long>,
-        callback: ConsumerSeekAware.ConsumerSeekCallback
-    ) {
-        assignments.forEach {
-            callback.seekToBeginning(it.key.topic(), it.key.partition())
-        }
-    }
 }
