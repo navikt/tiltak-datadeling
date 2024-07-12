@@ -4,53 +4,44 @@ Avtale om tiltak
 type Avtale {
     avtaleId: ID
     avtaleNr: Int
-    opprettetTidspunkt: DateTime
-    sistEndret: DateTime
-    bedriftNr: String
     deltakerFnr: String
     mentorFnr: String
+    bedriftNr: String
     veilederNavIdent: String
-    enhetGeografisk: String
-    enhetsnavnGeografisk: String
-    enhetOppfolging: String
-    enhetsnavnOppfolging: String
-    hendelseType: HendelseType
-    avtaleStatus: AvtaleStatus
+    opprettetTidspunkt: DateTime
+    data_gyldig_fra_tidspunkt: DateTime
+    data_gyldig_til_tidspunkt: DateTime
+    registrert_tidspunkt: DateTime
     tiltakstype: Tiltakstype
-    annullertTidspunkt: DateTime
+    annullert: Boolean
     annullertGrunn: String
     slettemerket: Boolean
     opprettetAvArbeidsgiver: Boolean
+    enhetGeografisk: String
+    enhetOppfolging: String
     godkjentForEtterregistrering: Boolean
     kvalifiseringsgruppe: Kvalifiseringsgruppe
     formidlingsgruppe: Formidlingsgruppe
-    #tilskuddPeriode: [Tilskuddsperiode]
     feilregistrert: Boolean
     versjon: Int
-    deltakerFornavn: String
-    deltakerEtternavn: String
-    deltakerTlf: String
-    bedriftNavn: String
-    arbeidsgiverFornavn: String
-    arbeidsgiverEtternavn: String
-    arbeidsgiverTlf: String
-    veilederFornavn: String
-    veilederEtternavn: String
-    veilederTlf: String
     oppfolging: String
     tilrettelegging: String
-    sluttDato: Date
+    avtaleStatus: AvtaleStatus
     startDato: Date
-    stillingprosent: Float
-    journalpostId: String
-    arbeidsoppgaver: String
-    stillingstittel: String
-    stillingStyrk08: String
-    stillingKonseptId: String
+    sluttDato: Date
+    godkjentAvDeltaker: LocalDateTime
+    godkjentTaushetserklaeringAvMentor: LocalDateTime
+    godkjentAvArbeidsgiver: LocalDateTime
+    godkjentAvVeileder: LocalDateTime
+    godkjentAvBeslutter: LocalDateTime
+
+
+
+
+
+    hendelseType: HendelseType
     antallDagerPerUke: Float
     refusjonKontaktperson: RefusjonKontaktperson
-    mentorFornavn: String
-    mentorEtternavn: String
     mentorOppgaver: String
     mentorAntallTimer: Float
     mentorTimelonn: Float
@@ -76,11 +67,6 @@ type Avtale {
     inkluderingstilskuddsutgift: [Inkluderingstilskuddsutgift]
     inkluderingstilskuddBegrunnelse: String
     inkluderingstilskuddTotalBelop: Float
-    godkjentAvDeltaker: LocalDateTime
-    godkjentTaushetserklaeringAvMentor: LocalDateTime
-    godkjentAvArbeidsgiver: LocalDateTime
-    godkjentAvVeileder: LocalDateTime
-    godkjentAvBeslutter: LocalDateTime
     avtaleInngaatt: LocalDateTime
     ikrafttredelsestidspunkt: LocalDateTime
     godkjentAvNavIdent: String

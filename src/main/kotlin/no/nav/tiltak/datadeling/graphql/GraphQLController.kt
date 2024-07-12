@@ -2,21 +2,21 @@ package no.nav.tiltak.datadeling.graphql
 
 import graphql.language.Field
 import graphql.schema.DataFetchingEnvironment
+import no.nav.tiltak.datadeling.AvtaleRepository
 import no.nav.tiltak.datadeling.domene.Tiltakstype
-import no.nav.tiltak.datadeling.opensearch.OpenSearchConnector
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.stereotype.Controller
 
 @Controller
-class GraphQLController(val openSearchConnector: OpenSearchConnector) {
+class GraphQLController(val avtaleRepository: AvtaleRepository) {
 
     @QueryMapping
     fun avtalerForPerson(
         dataFetchingEnvironment: DataFetchingEnvironment,
         @Argument personnummer: String
     ): List<AvtaleGQL> {
-        return openSearchConnector.hentAvtale(mapOf("deltakerFnr" to personnummer), dataFetchingEnvironment.minimer())
+        return avtaleRepository.hentAvtale(mapOf("deltakerFnr" to personnummer), dataFetchingEnvironment.minimer())
     }
 
     @QueryMapping
@@ -24,7 +24,7 @@ class GraphQLController(val openSearchConnector: OpenSearchConnector) {
         dataFetchingEnvironment: DataFetchingEnvironment,
         @Argument organisasjonsnummer: String
     ): List<AvtaleGQL> {
-        return openSearchConnector.hentAvtale(
+        return avtaleRepository.hentAvtale(
             mapOf("bedriftNr" to organisasjonsnummer),
             dataFetchingEnvironment.minimer()
         )
@@ -40,7 +40,9 @@ class GraphQLController(val openSearchConnector: OpenSearchConnector) {
             if (avtaleId != null) this.put("avtaleId", avtaleId)
             if (avtaleNr != null) this.put("avtaleNr", avtaleNr.toString())
         }
-        return openSearchConnector.hentAvtale(parametere, dataFetchingEnvironment.minimer()).first()
+        return avtaleRepository.hentAvtale(parametere, dataFetchingEnvironment.minimer()).apply {
+            println("avtale: $this")
+        }.first()
     }
 
     @QueryMapping
@@ -48,7 +50,7 @@ class GraphQLController(val openSearchConnector: OpenSearchConnector) {
         dataFetchingEnvironment: DataFetchingEnvironment,
         @Argument tiltakstype: Tiltakstype
     ): List<AvtaleGQL> {
-        return openSearchConnector.hentAvtale(
+        return avtaleRepository.hentAvtale(
             mapOf("tiltakstype" to tiltakstype.name),
             dataFetchingEnvironment.minimer()
         )
@@ -59,7 +61,7 @@ class GraphQLController(val openSearchConnector: OpenSearchConnector) {
         dataFetchingEnvironment: DataFetchingEnvironment,
         @Argument status: AvtaleStatusGQL
     ): List<AvtaleGQL> {
-        return openSearchConnector.hentAvtale(mapOf("avtaleStatus" to status.name), dataFetchingEnvironment.minimer())
+        return avtaleRepository.hentAvtale(mapOf("avtaleStatus" to status.name), dataFetchingEnvironment.minimer())
     }
 
 }

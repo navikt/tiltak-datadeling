@@ -3,29 +3,27 @@ package no.nav.tiltak.datadeling
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer
 import org.springframework.security.web.SecurityFilterChain
 
 
 @Configuration
 @EnableWebSecurity
-@Profile("security")
-class SecurityConfig {
+@Profile("!security")
+class NoSecurityConfig {
     @Bean
     @Throws(Exception::class)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .authorizeHttpRequests {
-                it
-                    .requestMatchers("/internal/**", "/graphiql", "/graphiql/**").permitAll()
-                    .anyRequest().authenticated()
+            .headers {
+                // disable x-frame-options
+                it.frameOptions { it.disable() }
             }
-            .oauth2ResourceServer { oauth2: OAuth2ResourceServerConfigurer<HttpSecurity?> ->
-                oauth2
-                    .jwt(Customizer.withDefaults())
+            .cors { it.disable() }
+            .csrf { it.disable() }
+            .authorizeHttpRequests {
+                it.requestMatchers("/**").permitAll()
             }
         return http.build()
     }

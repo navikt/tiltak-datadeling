@@ -40,8 +40,3 @@ management:
 tiltak-datadeling:
   kafka:
     topic: arbeidsgiver.tiltak-avtale-hendelse-compact
-  opensearch:
-    index: avtale
-    urlString: ${OPEN_SEARCH_URI}
-    username: ${OPEN_SEARCH_USERNAME}
-    password: ${OPEN_SEARCH_PASSWORD}
