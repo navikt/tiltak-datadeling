@@ -19,15 +19,16 @@ spring:
       enabled: true
       path: '/graphiql'
   datasource:
-    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;
-    username: sa
-    password: sa
+    #url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;
+    url: jdbc:postgresql://localhost:2345/postgres
+    username: postgres
+    password: mysecretpassword
     hikari:
       connection-test-query: select 1
       maximum-pool-size: 4
-  h2:
-    console:
-      enabled: true
+#  h2:
+#    console:
+#      enabled: true
   jooq:
     sql-dialect: postgres
 

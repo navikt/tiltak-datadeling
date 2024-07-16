@@ -42,7 +42,7 @@ class GraphQLController(val avtaleRepository: AvtaleRepository) {
         }
         return avtaleRepository.hentAvtale(parametere, dataFetchingEnvironment.minimer()).apply {
             println("avtale: $this")
-        }.first()
+        }.firstOrNull()
     }
 
     @QueryMapping
@@ -61,7 +61,7 @@ class GraphQLController(val avtaleRepository: AvtaleRepository) {
         dataFetchingEnvironment: DataFetchingEnvironment,
         @Argument status: AvtaleStatusGQL
     ): List<AvtaleGQL> {
-        return avtaleRepository.hentAvtale(mapOf("avtaleStatus" to status.name), dataFetchingEnvironment.minimer())
+        return avtaleRepository.hentAvtale(mapOf("avtaleStatus" to map(status).name), dataFetchingEnvironment.minimer())
     }
 
 }

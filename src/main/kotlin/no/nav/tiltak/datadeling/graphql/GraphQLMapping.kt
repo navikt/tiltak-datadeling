@@ -1,6 +1,6 @@
 package no.nav.tiltak.datadeling.graphql
 
-import no.nav.tiltak.datadeling.domene.Avtale
+import no.nav.tiltak.datadeling.db.tables.records.AvtaleRecord
 import no.nav.tiltak.datadeling.domene.AvtaleStatus
 import no.nav.tiltak.datadeling.domene.HendelseType
 import no.nav.tiltak.datadeling.domene.Inkluderingstilskuddsutgift
@@ -8,42 +8,36 @@ import no.nav.tiltak.datadeling.domene.InkluderingstilskuddsutgiftType
 import no.nav.tiltak.datadeling.domene.InnholdType
 import no.nav.tiltak.datadeling.domene.Maal
 import no.nav.tiltak.datadeling.domene.MaalKategori
+import no.nav.tiltak.datadeling.domene.Stillingstype
 import no.nav.tiltak.datadeling.domene.Tiltakstype
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
 data class AvtaleGQL(
     val avtaleId: UUID?,
     val avtaleNr: Int?,
-    val opprettetTidspunkt: ZonedDateTime?,
-    val sistEndret: ZonedDateTime?,
-    val bedriftNr: String?,
     val deltakerFnr: String?,
+    val bedriftNr: String?,
     val veilederNavIdent: String?,
-    val enhetGeografisk: String?,
-    val enhetOppfolging: String?,
-    val avtaleStatus: AvtaleStatusGQL?,
     val tiltakstype: Tiltakstype?,
-    val annullertTidspunkt: ZonedDateTime?,
-    //val annullertGrunn: String?,
-    val opprettetAvArbeidsgiver: Boolean?,
-    val godkjentForEtterregistrering: Boolean?,
-//    val kvalifiseringsgruppe: Kvalifiseringsgruppe?,
-//    val formidlingsgruppe: Formidlingsgruppe?,
-//    val tilskuddPeriode: List<Tilskuddsperiode>?,
-    val feilregistrert: Boolean?,
-    val sluttDato: LocalDate?,
+    val versjon: Int?,
+    val avtaleStatus: AvtaleStatusGQL?,
+    val avtaleInngaatt: ZonedDateTime?,
     val startDato: LocalDate?,
-//    val stillingprosent: Double?,
-//    val journalpostId: String?,
-    val godkjentAvDeltaker: LocalDateTime?,
-    val godkjentAvArbeidsgiver: LocalDateTime?,
-    val godkjentAvVeileder: LocalDateTime?,
-    //val godkjentAvBeslutter: LocalDateTime?,
-    //val avtaleInngaatt: LocalDateTime?,
+    val sluttDato: LocalDate?,
+    val godkjentAvDeltaker: ZonedDateTime?,
+    val godkjentAvArbeidsgiver: ZonedDateTime?,
+    val godkjentAvVeileder: ZonedDateTime?,
+    val godkjentAvBeslutter: ZonedDateTime?,
+    val godkjentPaVegneAv: Boolean?,
+    val godkjentPaVegneAvArbeidsgiver: Boolean?,
+    val stillingstype: Stillingstype?,
+    val godkjentAvNavIdent: String?,
+    val godkjentAvBeslutterNavIdent: String?,
+    val gyldigFraTidspunkt: ZonedDateTime,
+    val gyldigTilTidspunkt: ZonedDateTime?,
+    val registrertTidspunkt: ZonedDateTime
 )
 
 enum class InnholdTypeGQL {
@@ -253,54 +247,92 @@ fun map(avtaleStatus: AvtaleStatus): AvtaleStatusGQL =
         AvtaleStatus.AVSLUTTET -> AvtaleStatusGQL.AVSLUTTET
     }
 
-fun map(avtale: Avtale) = AvtaleGQL(
-    avtaleId = avtale.avtaleId,
-    avtaleNr = avtale.avtaleNr,
-    opprettetTidspunkt = avtale.opprettetTidspunkt.atZone(ZoneId.systemDefault()),
-    sistEndret = avtale.sistEndret.atZone(ZoneId.systemDefault()),
-    bedriftNr = avtale.bedriftNr,
-    deltakerFnr = avtale.deltakerFnr,
-    //mentorFnr = avtale.mentorFnr,
-    veilederNavIdent = avtale.veilederNavIdent,
-    enhetGeografisk = avtale.enhetGeografisk,
-    //enhetsnavnGeografisk = avtale.enhetsnavnGeografisk,
-    enhetOppfolging = avtale.enhetOppfolging,
-    //enhetsnavnOppfolging = avtale.enhetsnavnOppfolging,
-    //hendelseType = map(avtale.hendelseType),
-    avtaleStatus = map(no.nav.tiltak.datadeling.domene.AvtaleStatus.valueOf(avtale.avtaleStatus.name)),
-    tiltakstype = Tiltakstype.valueOf(avtale.tiltakstype.name),
-    annullertTidspunkt = avtale.annullertTidspunkt?.atZone(ZoneId.systemDefault()),
-    opprettetAvArbeidsgiver = avtale.opprettetAvArbeidsgiver,
-    godkjentForEtterregistrering = avtale.godkjentForEtterregistrering,
-//    kvalifiseringsgruppe = avtale.kvalifiseringsgruppe,
-//    formidlingsgruppe = avtale.formidlingsgruppe,
-//    tilskuddPeriode = avtale.tilskuddPeriode,
-    feilregistrert = avtale.feilregistrert,
-//    versjon = avtale.versjon,
-//    deltakerFornavn = avtale.deltakerFornavn,
-//    deltakerEtternavn = avtale.deltakerEtternavn,
-//    deltakerTlf = avtale.deltakerTlf,
-//    bedriftNavn = avtale.bedriftNavn,
-//    arbeidsgiverFornavn = avtale.arbeidsgiverFornavn,
-//    arbeidsgiverEtternavn = avtale.arbeidsgiverEtternavn,
-//    arbeidsgiverTlf = avtale.arbeidsgiverTlf,
-//    veilederFornavn = avtale.veilederFornavn,
-//    veilederEtternavn = avtale.veilederEtternavn,
-//    veilederTlf = avtale.veilederTlf,
-//    oppfolging = avtale.oppfolging,
-//    tilrettelegging = avtale.tilrettelegging,
-    sluttDato = avtale.sluttDato,
-    startDato = avtale.startDato,
-//    stillingprosent = avtale.stillingprosent,
-//    journalpostId = avtale.journalpostId,
-    godkjentAvDeltaker = avtale.godkjentAvDeltaker,
-    godkjentAvArbeidsgiver = avtale.godkjentAvArbeidsgiver,
-    godkjentAvVeileder = avtale.godkjentAvVeileder,
-//    godkjentAvBeslutter = avtale.godkjentAvBeslutter?.toLocalDateTime(),
-    //avtaleInngaatt = avtale.av,
-//    enhetKostnadssted = avtale.enhetKostnadssted,
-//    godkjentPaVegneGrunn = avtale.godkjentPaVegneGrunn,
-//    godkjentPaVegneAv = avtale.godkjentPaVegneAv,
-//    godkjentPaVegneAvArbeidsgiverGrunn = avtale.godkjentPaVegneAvArbeidsgiverGrunn,
-//    godkjentPaVegneAvArbeidsgiver = avtale.godkjentPaVegneAvArbeidsgiver,
-)
+fun map(avtaleStatus: AvtaleStatusGQL): AvtaleStatus =
+    when (avtaleStatus) {
+        AvtaleStatusGQL.AVBRUTT -> AvtaleStatus.AVBRUTT
+        AvtaleStatusGQL.ANNULLERT -> AvtaleStatus.ANNULLERT
+        AvtaleStatusGQL.PAABEGYNT -> AvtaleStatus.PÅBEGYNT
+        AvtaleStatusGQL.MANGLER_GODKJENNING -> AvtaleStatus.MANGLER_GODKJENNING
+        AvtaleStatusGQL.KLAR_FOR_OPPSTART -> AvtaleStatus.KLAR_FOR_OPPSTART
+        AvtaleStatusGQL.GJENNOMFORES -> AvtaleStatus.GJENNOMFØRES
+        AvtaleStatusGQL.AVSLUTTET -> AvtaleStatus.AVSLUTTET
+    }
+
+fun map(avtaleRecord: AvtaleRecord): AvtaleGQL =
+    AvtaleGQL(
+        avtaleId = avtaleRecord.avtaleId,
+        avtaleNr = avtaleRecord.avtaleNr,
+        deltakerFnr = avtaleRecord.deltakerFnr,
+        bedriftNr = avtaleRecord.bedriftNr,
+        veilederNavIdent = avtaleRecord.veilederNavIdent,
+        tiltakstype = Tiltakstype.valueOf(avtaleRecord.tiltakstype),
+        versjon = avtaleRecord.versjon,
+        avtaleStatus = map(AvtaleStatus.valueOf(avtaleRecord.avtaleStatus)),
+        avtaleInngaatt = avtaleRecord.avtaleInngått?.toZonedDateTime(),
+        startDato = avtaleRecord.startDato,
+        sluttDato = avtaleRecord.sluttDato,
+        godkjentAvDeltaker = avtaleRecord.godkjentAvDeltaker?.toZonedDateTime(),
+        godkjentAvArbeidsgiver = avtaleRecord.godkjentAvArbeidsgiver?.toZonedDateTime(),
+        godkjentAvVeileder = avtaleRecord.godkjentAvVeileder?.toZonedDateTime(),
+        godkjentAvBeslutter = avtaleRecord.godkjentAvBeslutter?.toZonedDateTime(),
+        godkjentPaVegneAv = avtaleRecord.godkjentPåVegneAv,
+        godkjentPaVegneAvArbeidsgiver = avtaleRecord.godkjentPåVegneAvArbeidsgiver,
+        stillingstype = avtaleRecord.stillingstype?.let { Stillingstype.valueOf(it) },
+        godkjentAvNavIdent = avtaleRecord.godkjentAvNavIdent,
+        godkjentAvBeslutterNavIdent = avtaleRecord.godkjentAvBeslutterNavIdent,
+        gyldigFraTidspunkt = avtaleRecord.gyldigFra.toZonedDateTime(),
+        gyldigTilTidspunkt = avtaleRecord.gyldigTil?.toZonedDateTime(),
+        registrertTidspunkt = avtaleRecord.registrertTidspunkt.toZonedDateTime()
+    )
+
+//fun map(avtale: Avtale) = AvtaleGQL(
+//    avtaleId = avtale.avtaleId,
+//    avtaleNr = avtale.avtaleNr,
+//    opprettetTidspunkt = avtale.opprettetTidspunkt.atZone(ZoneId.systemDefault()),
+//    sistEndret = avtale.sistEndret.atZone(ZoneId.systemDefault()),
+//    bedriftNr = avtale.bedriftNr,
+//    deltakerFnr = avtale.deltakerFnr,
+//    //mentorFnr = avtale.mentorFnr,
+//    veilederNavIdent = avtale.veilederNavIdent,
+//    enhetGeografisk = avtale.enhetGeografisk,
+//    //enhetsnavnGeografisk = avtale.enhetsnavnGeografisk,
+//    enhetOppfolging = avtale.enhetOppfolging,
+//    //enhetsnavnOppfolging = avtale.enhetsnavnOppfolging,
+//    //hendelseType = map(avtale.hendelseType),
+//    avtaleStatus = map(no.nav.tiltak.datadeling.domene.AvtaleStatus.valueOf(avtale.avtaleStatus.name)),
+//    tiltakstype = Tiltakstype.valueOf(avtale.tiltakstype.name),
+//    annullertTidspunkt = avtale.annullertTidspunkt?.atZone(ZoneId.systemDefault()),
+//    opprettetAvArbeidsgiver = avtale.opprettetAvArbeidsgiver,
+//    godkjentForEtterregistrering = avtale.godkjentForEtterregistrering,
+////    kvalifiseringsgruppe = avtale.kvalifiseringsgruppe,
+////    formidlingsgruppe = avtale.formidlingsgruppe,
+////    tilskuddPeriode = avtale.tilskuddPeriode,
+//    feilregistrert = avtale.feilregistrert,
+////    versjon = avtale.versjon,
+////    deltakerFornavn = avtale.deltakerFornavn,
+////    deltakerEtternavn = avtale.deltakerEtternavn,
+////    deltakerTlf = avtale.deltakerTlf,
+////    bedriftNavn = avtale.bedriftNavn,
+////    arbeidsgiverFornavn = avtale.arbeidsgiverFornavn,
+////    arbeidsgiverEtternavn = avtale.arbeidsgiverEtternavn,
+////    arbeidsgiverTlf = avtale.arbeidsgiverTlf,
+////    veilederFornavn = avtale.veilederFornavn,
+////    veilederEtternavn = avtale.veilederEtternavn,
+////    veilederTlf = avtale.veilederTlf,
+////    oppfolging = avtale.oppfolging,
+////    tilrettelegging = avtale.tilrettelegging,
+//    sluttDato = avtale.sluttDato,
+//    startDato = avtale.startDato,
+////    stillingprosent = avtale.stillingprosent,
+////    journalpostId = avtale.journalpostId,
+//    godkjentAvDeltaker = avtale.godkjentAvDeltaker,
+//    godkjentAvArbeidsgiver = avtale.godkjentAvArbeidsgiver,
+//    godkjentAvVeileder = avtale.godkjentAvVeileder,
+////    godkjentAvBeslutter = avtale.godkjentAvBeslutter?.toLocalDateTime(),
+//    //avtaleInngaatt = avtale.av,
+////    enhetKostnadssted = avtale.enhetKostnadssted,
+////    godkjentPaVegneGrunn = avtale.godkjentPaVegneGrunn,
+////    godkjentPaVegneAv = avtale.godkjentPaVegneAv,
+////    godkjentPaVegneAvArbeidsgiverGrunn = avtale.godkjentPaVegneAvArbeidsgiverGrunn,
+////    godkjentPaVegneAvArbeidsgiver = avtale.godkjentPaVegneAvArbeidsgiver,
+//)

@@ -1,20 +1,21 @@
 package no.nav.tiltak.datadeling
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.tiltak.datadeling.db.tables.records.AvtaleRecord
 import no.nav.tiltak.datadeling.db.tables.references.AVTALE
 import no.nav.tiltak.datadeling.domene.Avtale
 import no.nav.tiltak.datadeling.graphql.AvtaleGQL
+import no.nav.tiltak.datadeling.graphql.map
 import org.jooq.DSLContext
-import org.jooq.JSON
-import org.jooq.impl.DSL
-import org.jooq.impl.DSL.jsonGetAttributeAsText
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
+import java.util.*
+
+val MAKS_TID = OffsetDateTime.of(9999, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
 
 @Component
 class AvtaleRepository(
@@ -25,60 +26,95 @@ class AvtaleRepository(
             return hentAvtale(params.get("avtaleId")!!)
         } else if (params.containsKey("avtaleNr")) {
             return hentAvtaleVedNr(params.get("avtaleNr")?.toInt()!!)
+        } else if (params.containsKey("tiltakstype")) {
+            return hentAvtaleVedTiltakstype(params.get("tiltakstype")!!)
+        } else if (params.containsKey("avtaleStatus")) {
+            return hentAvtaleVedStatus(params.get("avtaleStatus")!!)
         }
         return emptyList()
     }
 
     fun hentAvtale(avtaleId: String): List<AvtaleGQL> = dslContext.selectFrom(AVTALE)
-        .where(jsonGetAttributeAsText(AVTALE.AVTALE_DATA, "avtaleId").eq(avtaleId)).fetch().map {
+        .where(AVTALE.AVTALE_ID.eq(UUID.fromString(avtaleId)))
+        .and(AVTALE.GYLDIG_FRA.le(OffsetDateTime.now()))
+        .and(AVTALE.GYLDIG_TIL.gt(OffsetDateTime.now()))
+        .fetch().map {
             map(it)
         }
-
-    private fun map(avtaleRecord: AvtaleRecord?): AvtaleGQL {
-        return jacksonObjectMapper().readValue(avtaleRecord?.avtaleData?.data(), AvtaleGQL::class.java)
-    }
 
     fun hentAvtaleVedNr(avtaleNr: Int): List<AvtaleGQL> = dslContext.selectFrom(AVTALE)
-        .where(jsonGetAttributeAsText(AVTALE.AVTALE_DATA, "avtaleNr").eq(avtaleNr.toString())).fetch().map {
+        .where(AVTALE.AVTALE_NR.eq(avtaleNr))
+        .and(AVTALE.GYLDIG_FRA.le(OffsetDateTime.now()))
+        .and(AVTALE.GYLDIG_TIL.gt(OffsetDateTime.now()))
+        .fetch().map {
             map(it)
         }
 
-    fun save(avtale: Avtale): Avtale? {
-        return dslContext.transactionResult { it ->
-//        val sisteAvtale = dslContext.selectFrom(AVTALE).where(
-//            AVTALE.AVTALE_ID.eq(avtale.avtaleId),
-//            AVTALE.GYLDIG_TIL_TIDSPUNKT.isNull
-//        ).fetch().firstOrNull()
-//        val nyGyldigFra = OffsetDateTime.now()
-//        if (sisteAvtale != null) {
-//            dslContext.update(AVTALE)
-//                .set(AVTALE.GYLDIG_TIL_TIDSPUNKT, nyGyldigFra)
-//                .where(AVTALE.AVTALE_ID.eq(avtale.avtaleId).and(AVTALE.GYLDIG_TIL_TIDSPUNKT.isNull))
-//                .execute()
-//        }
-            DSL.using(it).insertInto(AVTALE)
-                .set(
-                    dslContext.newRecord(
-                        AVTALE, AvtaleRecord(
-                            null,
-                            JSON.valueOf(
-                                jacksonObjectMapper().writeValueAsString(avtale)
-                            ),
-                            avtale.startDato?.toOsloOffset()!!,
-                            avtale.sluttDato?.toOsloOffset(),
-                            OffsetDateTime.now()
-                        )
-                    )
-                )
-                .returning()
-                .fetchOneInto(Avtale::class.java)
+    fun hentAvtaleVedTiltakstype(tiltakstype: String): List<AvtaleGQL> = dslContext.selectFrom(AVTALE)
+        .where(AVTALE.TILTAKSTYPE.eq(tiltakstype))
+        .and(AVTALE.GYLDIG_FRA.le(OffsetDateTime.now()))
+        .and(AVTALE.GYLDIG_TIL.gt(OffsetDateTime.now()))
+        .fetch().map {
+            map(it)
         }
+
+    fun hentAvtaleVedStatus(status: String): List<AvtaleGQL> = dslContext.selectFrom(AVTALE)
+        .where(AVTALE.AVTALE_STATUS.eq(status))
+        .and(AVTALE.GYLDIG_FRA.le(OffsetDateTime.now()))
+        .and(AVTALE.GYLDIG_TIL.gt(OffsetDateTime.now()))
+        .fetch().map {
+            map(it)
+        }
+
+    fun save(avtale: Avtale): AvtaleRecord? = dslContext.transactionResult { it ->
+        // Sett gyldig-til for forrige versjon (hvis vi har en tidligere versjon)
+        it.dsl().update(AVTALE)
+            .set(AVTALE.GYLDIG_TIL, avtale.sistEndret.toOsloOffset())
+            .where(AVTALE.AVTALE_ID.eq(avtale.avtaleId))
+            .and(AVTALE.GYLDIG_TIL.eq(MAKS_TID))
+            .execute()
+
+        // Og sett inn ny
+        return@transactionResult it.dsl().insertInto(AVTALE)
+            .set(
+                AvtaleRecord(
+                    null,
+                    avtale.avtaleId,
+                    avtale.avtaleNr,
+                    avtale.deltakerFnr,
+                    avtale.bedriftNr,
+                    avtale.veilederNavIdent,
+                    avtale.tiltakstype.name,
+                    avtale.versjon,
+                    avtale.avtaleStatus.name,
+                    avtale.avtaleInngått?.toOsloOffset(),
+                    avtale.startDato,
+                    avtale.sluttDato,
+                    avtale.godkjentAvDeltaker?.toOsloOffset(),
+                    avtale.godkjentAvArbeidsgiver?.toOsloOffset(),
+                    avtale.godkjentAvVeileder?.toOsloOffset(),
+                    avtale.godkjentAvBeslutter?.toOsloOffset(),
+                    avtale.godkjentPaVegneAv,
+                    avtale.godkjentPaVegneAvArbeidsgiver,
+                    avtale.stillingstype?.name,
+                    avtale.godkjentAvNavIdent,
+                    avtale.godkjentAvBeslutterNavIdent,
+                    avtale.sistEndret.toOsloOffset(),
+                    MAKS_TID,
+                    OffsetDateTime.now()
+                )
+            )
+            .returning()
+            .fetchOneInto(AvtaleRecord::class.java)
     }
 
-    fun count(): Long = 0
-
+    fun count() = dslContext.fetchCount(
+        AVTALE, AVTALE.GYLDIG_FRA.le(OffsetDateTime.now())
+            .and(AVTALE.GYLDIG_TIL.gt(OffsetDateTime.now()))
+    );
 }
 
-private fun Instant.toOsloOffset(): OffsetDateTime = this.atZone(ZoneId.of("Europe/Oslo")).toOffsetDateTime()
-private fun LocalDate.toOsloOffset(): OffsetDateTime = this.atStartOfDay(ZoneId.of("Europe/Oslo")).toOffsetDateTime()
-private fun LocalDateTime.toOsloOffset(): OffsetDateTime = this.atZone(ZoneId.of("Europe/Oslo")).toOffsetDateTime()
+private val osloSone = ZoneId.of("Europe/Oslo")
+private fun Instant.toOsloOffset(): OffsetDateTime = this.atZone(osloSone).toOffsetDateTime()
+private fun LocalDate.toOsloOffset(): OffsetDateTime = this.atStartOfDay(osloSone).toOffsetDateTime()
+private fun LocalDateTime.toOsloOffset(): OffsetDateTime = this.atZone(osloSone).toOffsetDateTime()

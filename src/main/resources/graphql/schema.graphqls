@@ -5,126 +5,26 @@ type Avtale {
     avtaleId: ID
     avtaleNr: Int
     deltakerFnr: String
-    mentorFnr: String
     bedriftNr: String
     veilederNavIdent: String
-    opprettetTidspunkt: DateTime
-    data_gyldig_fra_tidspunkt: DateTime
-    data_gyldig_til_tidspunkt: DateTime
-    registrert_tidspunkt: DateTime
     tiltakstype: Tiltakstype
-    annullert: Boolean
-    annullertGrunn: String
-    slettemerket: Boolean
-    opprettetAvArbeidsgiver: Boolean
-    enhetGeografisk: String
-    enhetOppfolging: String
-    godkjentForEtterregistrering: Boolean
-    kvalifiseringsgruppe: Kvalifiseringsgruppe
-    formidlingsgruppe: Formidlingsgruppe
-    feilregistrert: Boolean
     versjon: Int
-    oppfolging: String
-    tilrettelegging: String
     avtaleStatus: AvtaleStatus
+    avtaleInngaatt: LocalDateTime
     startDato: Date
     sluttDato: Date
-    godkjentAvDeltaker: LocalDateTime
-    godkjentTaushetserklaeringAvMentor: LocalDateTime
-    godkjentAvArbeidsgiver: LocalDateTime
-    godkjentAvVeileder: LocalDateTime
-    godkjentAvBeslutter: LocalDateTime
-
-
-
-
-
-    hendelseType: HendelseType
-    antallDagerPerUke: Float
-    refusjonKontaktperson: RefusjonKontaktperson
-    mentorOppgaver: String
-    mentorAntallTimer: Float
-    mentorTimelonn: Float
-    mentorTlf: String
-    arbeidsgiverKontonummer: String
-    lonnstilskuddProsent: Int
-    manedslonn: Float
-    feriepengesats: Float
-    arbeidsgiveravgift: Float
-    harFamilietilknytning: Boolean
-    familietilknytningForklaring: String
-    feriepengerBelop: Float
-    otpSats: Float
-    otpBelop: Float
-    arbeidsgiveravgiftBelop: Float
-    sumLonnsutgifter: Float
-    sumLonnstilskudd: Float
-    manedslonn100pst: Float
-    sumLonnstilskuddRedusert: Float
-    datoForRedusertProsent: Date
+    godkjentAvDeltaker: DateTime
+    godkjentAvArbeidsgiver: DateTime
+    godkjentAvVeileder: DateTime
+    godkjentAvBeslutter: DateTime
+    godkjentPaVegneAv: Boolean
+    godkjentPaVegneAvArbeidsgiver: Boolean
     stillingstype: Stillingstype
-    maal: [Maal]
-    inkluderingstilskuddsutgift: [Inkluderingstilskuddsutgift]
-    inkluderingstilskuddBegrunnelse: String
-    inkluderingstilskuddTotalBelop: Float
-    avtaleInngaatt: LocalDateTime
-    ikrafttredelsestidspunkt: LocalDateTime
     godkjentAvNavIdent: String
     godkjentAvBeslutterNavIdent: String
-    enhetKostnadssted: Boolean
-    enhetsnavnKostnadssted: Boolean
-    godkjentPaVegneGrunn: GodkjentPaVegneGrunn
-    godkjentPaVegneAv: Boolean
-    godkjentPaVegneAvArbeidsgiverGrunn: GodkjentPaVegneAvArbeidsgiverGrunn
-    godkjentPaVegneAvArbeidsgiver: Boolean
-    innholdType: InnholdType
-    utfortAv: String
-    utfortAvRolle: AvtaleRolle
-}
-
-enum HendelseType {
-    OPPRETTET
-    GODKJENT_AV_ARBEIDSGIVER
-    GODKJENT_AV_VEILEDER
-    GODKJENT_AV_DELTAKER
-    SIGNERT_AV_MENTOR
-    GODKJENT_PAA_VEGNE_AV
-    GODKJENT_PAA_VEGNE_AV_DELTAKER_OG_ARBEIDSGIVER
-    GODKJENT_PAA_VEGNE_AV_ARBEIDSGIVER
-    GODKJENNINGER_OPPHEVET_AV_ARBEIDSGIVER
-    GODKJENNINGER_OPPHEVET_AV_VEILEDER
-    DELT_MED_DELTAKER
-    DELT_MED_ARBEIDSGIVER
-    DELT_MED_MENTOR
-    ENDRET
-    AVBRUTT
-    ANNULLERT
-    LAAST_OPP
-    GJENOPPRETTET
-    OPPRETTET_AV_ARBEIDSGIVER
-    NY_VEILEDER
-    AVTALE_FORDELT
-    TILSKUDDSPERIODE_AVSLATT
-    TILSKUDDSPERIODE_GODKJENT
-    AVTALE_FORKORTET
-    AVTALE_FORLENGET
-    MAAL_ENDRET
-    INKLUDERINGSTILSKUDD_ENDRET
-    OM_MENTOR_ENDRET
-    TILSKUDDSBEREGNING_ENDRET
-    KONTAKTINFORMASJON_ENDRET
-    STILLINGSBESKRIVELSE_ENDRET
-    OPPFOLGING_OG_TILRETTELEGGING_ENDRET
-    AVTALE_INNGAATT
-    REFUSJON_KLAR
-    REFUSJON_KLAR_REVARSEL
-    REFUSJON_FRIST_FORLENGET
-    REFUSJON_KORRIGERT
-    VARSLER_SETT
-    AVTALE_SLETTET
-    GODKJENT_FOR_ETTERREGISTRERING
-    FJERNET_ETTERREGISTRERING
-    STATUSENDRING
+    gyldig_fra_tidspunkt: DateTime
+    gyldig_til_tidspunkt: DateTime
+    registrert_tidspunkt: DateTime
 }
 
 enum AvtaleStatus {
