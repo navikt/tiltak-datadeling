@@ -27,4 +27,4 @@ CREATE TABLE avtale (
 
 create index avtale__gyldig_fra on avtale (gyldig_fra);
 create index avtale__gyldig_til on avtale (gyldig_til);
-create index avtale__avtale_id on avtale (avtale_id);
+create unique index avtale__avtale_id on avtale (avtale_id);

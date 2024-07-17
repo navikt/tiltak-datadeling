@@ -5,6 +5,7 @@ spring:
       group-id: "tiltak-datadeling-test"
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -13,6 +14,8 @@ spring:
       ssl:
         keystore: null
         truststore: null
+    listener:
+      ack-mode: manual
   graphql:
     path: '/graphql'
     graphiql:
@@ -20,18 +23,15 @@ spring:
       path: '/graphiql'
   datasource:
     #url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;
-    url: jdbc:postgresql://localhost:2345/postgres
-    username: postgres
-    password: mysecretpassword
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     hikari:
       connection-test-query: select 1
       maximum-pool-size: 4
-#  h2:
-#    console:
-#      enabled: true
   jooq:
     sql-dialect: postgres
 
 tiltak-datadeling:
   kafka:
-    topic: test-topic
+    topic: tiltak-datadeling-test

@@ -40,9 +40,7 @@ class GraphQLController(val avtaleRepository: AvtaleRepository) {
             if (avtaleId != null) this.put("avtaleId", avtaleId)
             if (avtaleNr != null) this.put("avtaleNr", avtaleNr.toString())
         }
-        return avtaleRepository.hentAvtale(parametere, dataFetchingEnvironment.minimer()).apply {
-            println("avtale: $this")
-        }.firstOrNull()
+        return avtaleRepository.hentAvtale(parametere, dataFetchingEnvironment.minimer()).firstOrNull()
     }
 
     @QueryMapping

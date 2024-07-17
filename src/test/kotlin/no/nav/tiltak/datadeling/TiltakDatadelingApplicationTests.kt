@@ -1,31 +1,28 @@
 package no.nav.tiltak.datadeling
 
-import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.junit.jupiter.api.AfterEach
+import org.junit.ClassRule
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.kafka.test.context.EmbeddedKafka
+import org.springframework.boot.test.util.TestPropertyValues
+import org.springframework.context.ApplicationContextInitializer
+import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
-import java.time.Duration
-import java.util.*
+import org.springframework.test.context.ContextConfiguration
+import org.testcontainers.containers.PostgreSQLContainer
 
 
-@ActiveProfiles(profiles = ["test", "local"])
+@ActiveProfiles(profiles = ["test", "local", "kafka"])
 @SpringBootTest
 @DirtiesContext
-@EmbeddedKafka(partitions = 1, brokerProperties = ["listeners=PLAINTEXT://localhost:9092", "port=9092"], topics = ["test-topic"])
+//@EmbeddedKafka(partitions = 1, brokerProperties = ["listeners=PLAINTEXT://localhost:9092", "port=9092"], topics = ["test-topic"])
+@ContextConfiguration(initializers = [TiltakDatadelingApplicationTests.Companion.Initializer::class])
 class TiltakDatadelingApplicationTests {
-
-    @Autowired
-    lateinit var consumer: KafkaConsumer<String, String>
 
     @Autowired
     lateinit var producer: KafkaProducer<String, String>
@@ -36,40 +33,36 @@ class TiltakDatadelingApplicationTests {
     @Value("\${tiltak-datadeling.kafka.topic}")
     lateinit var topic: String
 
-    @BeforeEach
-    fun setup() {
-        consumer.subscribe(listOf(topic))
-    }
-
-    @AfterEach
-    fun teardown() {
-        consumer.unsubscribe()
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun givenKafkaDockerContainer_whenSendingWithSimpleProducer_thenMessageReceived() {
-        val data = "Sending with our own simple KafkaProducer"
-        producer.send(ProducerRecord(topic, data)).get()
-        val messageConsumed = consumer.poll(Duration.ofSeconds(10)).records(topic).map { it.value() }
-
-        assertTrue(messageConsumed.contains(data))
-    }
-
     @Test
     fun `kan konsumere og indeksere avtaler`() {
-        val testData = hentTestdata().take(20).apply {
-            this.forEach {
-                producer.send(ProducerRecord(topic, it))
-            }
+        val testData = hentTestdata().take(20)
+        testData.forEach {
+            producer.send(ProducerRecord(topic, it))
         }
         Thread.sleep(10000)
 
-        assertEquals(testData.count().toLong(), avtaleRepository.count())
+        assertEquals(testData.count(), avtaleRepository.count())
     }
 
     fun hentTestdata(): List<String> {
         return this::class.java.classLoader.getResourceAsStream("test-data.jsonl")?.bufferedReader()?.readLines()
             ?: emptyList()
+    }
+
+    companion object {
+        class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+            override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
+                postgreSQLContainer.start()
+                TestPropertyValues.of(
+                    "spring.datasource.url=" + postgreSQLContainer.jdbcUrl,
+                    "spring.datasource.username=" + postgreSQLContainer.username,
+                    "spring.datasource.password=" + postgreSQLContainer.password
+                ).applyTo(configurableApplicationContext.environment)
+            }
+        }
+
+        @JvmField
+        @ClassRule
+        var postgreSQLContainer: PostgreSQLContainer<TiltakPostgresContainer> = TiltakPostgresContainer.getInstance()
     }
 }
