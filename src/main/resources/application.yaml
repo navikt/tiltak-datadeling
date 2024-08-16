@@ -1,4 +1,13 @@
 spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      connection-test-query: select 1
+      maximum-pool-size: 4
+  jooq:
+    sql-dialect: postgres
   kafka:
     bootstrap-servers: ${KAFKA_BROKERS}
     properties:
