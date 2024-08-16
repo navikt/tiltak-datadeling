@@ -9,6 +9,17 @@ spec:
   env:
     - name: MILJO
       value: dev-gcp
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_16
+        tier: db-f1-micro
+        cascadingDelete: false
+        highAvailability: false
+        diskAutoresize: true
+        diskAutoresizeLimit: 60
+        databases:
+          - name: tiltak-datadeling
+            envVarPrefix: DB
   kafka:
     pool: nav-dev
   image: {{image}}
