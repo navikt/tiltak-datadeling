@@ -1,11 +1,15 @@
 spring:
   datasource:
+    driver-class-name: org.postgresql.Driver
     url: "jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USERNAME}&password=${DB_PASSWORD}"
     hikari:
       connection-test-query: select 1
       maximum-pool-size: 4
   jooq:
     sql-dialect: postgres
+  sql:
+    init:
+      platform: postgres
   kafka:
     bootstrap-servers: ${KAFKA_BROKERS}
     properties:
