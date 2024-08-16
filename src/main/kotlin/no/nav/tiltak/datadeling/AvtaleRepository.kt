@@ -1,11 +1,13 @@
 package no.nav.tiltak.datadeling
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.convertValue
 import no.nav.tiltak.datadeling.db.tables.records.AvtaleRecord
 import no.nav.tiltak.datadeling.db.tables.references.AVTALE
 import no.nav.tiltak.datadeling.domene.Avtale
 import no.nav.tiltak.datadeling.graphql.AvtaleGQL
-import no.nav.tiltak.datadeling.graphql.map
 import org.jooq.DSLContext
+import org.jooq.Field
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.LocalDateTime
@@ -18,43 +20,63 @@ val MAKS_TID = OffsetDateTime.of(9999, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
 
 @Component
 class AvtaleRepository(
-    val dslContext: DSLContext
+    val dslContext: DSLContext,
+    val strictMapper: ObjectMapper
 ) {
+    final val tilGqlFelt = AVTALE.fields().map {
+        it.name to it.name
+            .replace("å", "aa")
+            .replace("ø", "oe")
+            .replace("æ", "ae")
+            .replace(Regex("_(\\w)"), { matchResult: MatchResult -> matchResult.groupValues.last().uppercase() })
+    }.toMap()
+    val tilTabellFelt = tilGqlFelt.map { it.value to it.key }.toMap()
+
     fun hentAvtale(params: Map<String, String>, minimer: List<String>): List<AvtaleGQL> {
+        val kolonner = minimer
+            .map { tilTabellFelt.getOrDefault(it, it) }
+            .map { AVTALE.field(it) }
+            .filterNotNull()
         if (params.containsKey("avtaleId")) {
-            return hentAvtale(params.get("avtaleId")!!)
+            return hentAvtaleQuery(params.get("avtaleId")!!, kolonner)
         } else if (params.containsKey("avtaleNr")) {
-            return hentAvtaleVedNr(params.get("avtaleNr")?.toInt()!!)
+            return hentAvtaleVedNr(params.get("avtaleNr")?.toInt()!!, kolonner)
         } else if (params.containsKey("tiltakstype")) {
-            return hentAvtaleVedTiltakstype(params.get("tiltakstype")!!)
+            return hentAvtaleVedTiltakstype(params.get("tiltakstype")!!, kolonner)
         } else if (params.containsKey("avtaleStatus")) {
-            return hentAvtaleVedStatus(params.get("avtaleStatus")!!)
+            return hentAvtaleVedStatus(params.get("avtaleStatus")!!, kolonner)
         }
         return emptyList()
     }
 
-    fun hentAvtale(avtaleId: String): List<AvtaleGQL> = dslContext.selectFrom(AVTALE)
-        .where(AVTALE.AVTALE_ID.eq(UUID.fromString(avtaleId)))
-        .fetch().map {
-            map(it)
-        }
+    fun hentAvtaleQuery(avtaleId: String, kolonner: List<Field<*>>): List<AvtaleGQL> =
+        dslContext.select(kolonner).from(AVTALE)
+            .where(AVTALE.AVTALE_ID.eq(UUID.fromString(avtaleId)))
+            .fetchMaps()
+            .map { konverterHashmap(it) }
 
-    fun hentAvtaleVedNr(avtaleNr: Int): List<AvtaleGQL> = dslContext.selectFrom(AVTALE)
+    fun konverterHashmap(hashMap: Map<String, Any>) = strictMapper.convertValue<AvtaleGQL>(
+        hashMap.map {
+            tilGqlFelt.getOrDefault(it.key, it.key) to it.value
+        }.toMap()
+    )
+
+    fun hentAvtaleVedNr(avtaleNr: Int, kolonner: List<Field<*>>): List<AvtaleGQL> = dslContext.select(kolonner).from(AVTALE)
         .where(AVTALE.AVTALE_NR.eq(avtaleNr))
-        .fetch().map {
-            map(it)
+        .fetchMaps().map {
+            konverterHashmap(it)
         }
 
-    fun hentAvtaleVedTiltakstype(tiltakstype: String): List<AvtaleGQL> = dslContext.selectFrom(AVTALE)
+    fun hentAvtaleVedTiltakstype(tiltakstype: String, kolonner: List<Field<*>>): List<AvtaleGQL> = dslContext.select(kolonner).from(AVTALE)
         .where(AVTALE.TILTAKSTYPE.eq(tiltakstype))
-        .fetch().map {
-            map(it)
+        .fetchMaps().map {
+            konverterHashmap(it)
         }
 
-    fun hentAvtaleVedStatus(status: String): List<AvtaleGQL> = dslContext.selectFrom(AVTALE)
+    fun hentAvtaleVedStatus(status: String, kolonner: List<Field<*>>): List<AvtaleGQL> = dslContext.select(kolonner).from(AVTALE)
         .where(AVTALE.AVTALE_STATUS.eq(status))
-        .fetch().map {
-            map(it)
+        .fetchMaps().map {
+            konverterHashmap(it)
         }
 
     fun save(avtale: Avtale): AvtaleRecord? = dslContext.transactionResult { it ->

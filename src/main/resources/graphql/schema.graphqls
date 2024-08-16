@@ -10,15 +10,15 @@ type Avtale {
     tiltakstype: Tiltakstype
     versjon: Int
     avtaleStatus: AvtaleStatus
-    avtaleInngaatt: LocalDateTime
+    avtaleInngaatt: DateTime
     startDato: Date
     sluttDato: Date
     godkjentAvDeltaker: DateTime
     godkjentAvArbeidsgiver: DateTime
     godkjentAvVeileder: DateTime
     godkjentAvBeslutter: DateTime
-    godkjentPaVegneAv: Boolean
-    godkjentPaVegneAvArbeidsgiver: Boolean
+    godkjentPaaVegneAv: Boolean
+    godkjentPaaVegneAvArbeidsgiver: Boolean
     stillingstype: Stillingstype
     godkjentAvNavIdent: String
     godkjentAvBeslutterNavIdent: String
@@ -33,7 +33,7 @@ enum AvtaleStatus {
     PAABEGYNT
     MANGLER_GODKJENNING
     KLAR_FOR_OPPSTART
-    GJENNOMFORES
+    GJENNOMFOERES
     AVSLUTTET
 }
 

@@ -30,14 +30,14 @@ data class AvtaleGQL(
     val godkjentAvArbeidsgiver: ZonedDateTime?,
     val godkjentAvVeileder: ZonedDateTime?,
     val godkjentAvBeslutter: ZonedDateTime?,
-    val godkjentPaVegneAv: Boolean?,
-    val godkjentPaVegneAvArbeidsgiver: Boolean?,
+    val godkjentPaaVegneAv: Boolean?,
+    val godkjentPaaVegneAvArbeidsgiver: Boolean?,
     val stillingstype: Stillingstype?,
     val godkjentAvNavIdent: String?,
     val godkjentAvBeslutterNavIdent: String?,
-    val gyldigFraTidspunkt: ZonedDateTime,
+    val gyldigFraTidspunkt: ZonedDateTime?,
     val gyldigTilTidspunkt: ZonedDateTime?,
-    val registrertTidspunkt: ZonedDateTime
+    val registrertTidspunkt: ZonedDateTime?
 )
 
 enum class InnholdTypeGQL {
@@ -158,10 +158,10 @@ fun map(maalKategori: MaalKategori): MaalKategoriGQL =
     }
 
 fun map(inkluderingstilskuddsutgift: Inkluderingstilskuddsutgift) = InkluderingstilskuddsutgiftGQL(
-        id = inkluderingstilskuddsutgift.id,
-        belop = inkluderingstilskuddsutgift.beløp,
-        type = map(inkluderingstilskuddsutgift.type)
-    )
+    id = inkluderingstilskuddsutgift.id,
+    belop = inkluderingstilskuddsutgift.beløp,
+    type = map(inkluderingstilskuddsutgift.type)
+)
 
 fun map(inkluderingstilskuddsutgiftType: InkluderingstilskuddsutgiftType) =
     when (inkluderingstilskuddsutgiftType) {
@@ -275,8 +275,8 @@ fun map(avtaleRecord: AvtaleRecord): AvtaleGQL =
         godkjentAvArbeidsgiver = avtaleRecord.godkjentAvArbeidsgiver?.toZonedDateTime(),
         godkjentAvVeileder = avtaleRecord.godkjentAvVeileder?.toZonedDateTime(),
         godkjentAvBeslutter = avtaleRecord.godkjentAvBeslutter?.toZonedDateTime(),
-        godkjentPaVegneAv = avtaleRecord.godkjentPåVegneAv,
-        godkjentPaVegneAvArbeidsgiver = avtaleRecord.godkjentPåVegneAvArbeidsgiver,
+        godkjentPaaVegneAv = avtaleRecord.godkjentPåVegneAv,
+        godkjentPaaVegneAvArbeidsgiver = avtaleRecord.godkjentPåVegneAvArbeidsgiver,
         stillingstype = avtaleRecord.stillingstype?.let { Stillingstype.valueOf(it) },
         godkjentAvNavIdent = avtaleRecord.godkjentAvNavIdent,
         godkjentAvBeslutterNavIdent = avtaleRecord.godkjentAvBeslutterNavIdent,
