@@ -1,11 +1,11 @@
 package no.nav.tiltak.datadeling
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.convertValue
 import no.nav.tiltak.datadeling.db.tables.records.AvtaleRecord
 import no.nav.tiltak.datadeling.db.tables.references.AVTALE
 import no.nav.tiltak.datadeling.domene.Avtale
 import no.nav.tiltak.datadeling.graphql.AvtaleGQL
+import no.nav.tiltak.datadeling.graphql.map
+import org.jooq.Condition
 import org.jooq.DSLContext
 import org.jooq.Field
 import org.springframework.stereotype.Component
@@ -20,8 +20,7 @@ val MAKS_TID = OffsetDateTime.of(9999, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
 
 @Component
 class AvtaleRepository(
-    val dslContext: DSLContext,
-    val strictMapper: ObjectMapper
+    val dslContext: DSLContext
 ) {
     final val tilGqlFelt = AVTALE.fields().map {
         it.name to it.name
@@ -38,46 +37,25 @@ class AvtaleRepository(
             .map { AVTALE.field(it) }
             .filterNotNull()
         if (params.containsKey("avtaleId")) {
-            return hentAvtaleQuery(params.get("avtaleId")!!, kolonner)
+            return hentAvtaleQuery(AVTALE.AVTALE_ID.eq(UUID.fromString(params.get("avtaleId")!!)), kolonner)
         } else if (params.containsKey("avtaleNr")) {
-            return hentAvtaleVedNr(params.get("avtaleNr")?.toInt()!!, kolonner)
+            return hentAvtaleQuery(AVTALE.AVTALE_NR.eq(params.get("avtaleNr")?.toInt()!!), kolonner)
         } else if (params.containsKey("tiltakstype")) {
-            return hentAvtaleVedTiltakstype(params.get("tiltakstype")!!, kolonner)
+            return hentAvtaleQuery(AVTALE.TILTAKSTYPE.eq(params.get("tiltakstype")), kolonner)
         } else if (params.containsKey("avtaleStatus")) {
-            return hentAvtaleVedStatus(params.get("avtaleStatus")!!, kolonner)
+            return hentAvtaleQuery(AVTALE.AVTALE_STATUS.eq(params.get("avtaleStatus")), kolonner)
+        } else if (params.containsKey("bedriftNr")) {
+            return hentAvtaleQuery(AVTALE.BEDRIFT_NR.eq(params.get("bedriftNr")), kolonner)
+        } else if (params.containsKey("deltakerFnr")) {
+            return hentAvtaleQuery(AVTALE.DELTAKER_FNR.eq(params.get("deltakerFnr")), kolonner)
         }
         return emptyList()
     }
 
-    fun hentAvtaleQuery(avtaleId: String, kolonner: List<Field<*>>): List<AvtaleGQL> =
-        dslContext.select(kolonner).from(AVTALE)
-            .where(AVTALE.AVTALE_ID.eq(UUID.fromString(avtaleId)))
-            .fetchMaps()
-            .map { konverterHashmap(it) }
-
-    fun konverterHashmap(hashMap: Map<String, Any>) = strictMapper.convertValue<AvtaleGQL>(
-        hashMap.map {
-            tilGqlFelt.getOrDefault(it.key, it.key) to it.value
-        }.toMap()
-    )
-
-    fun hentAvtaleVedNr(avtaleNr: Int, kolonner: List<Field<*>>): List<AvtaleGQL> = dslContext.select(kolonner).from(AVTALE)
-        .where(AVTALE.AVTALE_NR.eq(avtaleNr))
-        .fetchMaps().map {
-            konverterHashmap(it)
-        }
-
-    fun hentAvtaleVedTiltakstype(tiltakstype: String, kolonner: List<Field<*>>): List<AvtaleGQL> = dslContext.select(kolonner).from(AVTALE)
-        .where(AVTALE.TILTAKSTYPE.eq(tiltakstype))
-        .fetchMaps().map {
-            konverterHashmap(it)
-        }
-
-    fun hentAvtaleVedStatus(status: String, kolonner: List<Field<*>>): List<AvtaleGQL> = dslContext.select(kolonner).from(AVTALE)
-        .where(AVTALE.AVTALE_STATUS.eq(status))
-        .fetchMaps().map {
-            konverterHashmap(it)
-        }
+    fun hentAvtaleQuery(condition: Condition, kolonner: List<Field<*>>): List<AvtaleGQL> =
+        dslContext.selectFrom(AVTALE)
+            .where(condition)
+            .map { map(it) }
 
     fun save(avtale: Avtale): AvtaleRecord? = dslContext.transactionResult { it ->
         // Sett gyldig-til for forrige versjon (hvis vi har en tidligere versjon)
