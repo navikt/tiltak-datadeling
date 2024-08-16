@@ -49,9 +49,6 @@ spec:
       enabled: true
     sidecar:
       enabled: true
-  openSearch:
-    instance: datadeling
-    access: admin
   accessPolicy:
     inbound:
       rules:
