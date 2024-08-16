@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-@Profile("security")
+@Profile("!local")
 class SecurityConfig {
     @Bean
     @Throws(Exception::class)
