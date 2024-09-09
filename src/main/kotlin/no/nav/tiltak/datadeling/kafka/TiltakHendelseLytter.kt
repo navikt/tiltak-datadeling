@@ -40,8 +40,6 @@ class TiltakHendelseKafkaKonsument(
      */
     override fun onPartitionsAssigned(assignments: MutableMap<TopicPartition, Long>, callback: ConsumerSeekAware.ConsumerSeekCallback) {
         log.info("Resetter offset for $assignments")
-        assignments.forEach {
-            callback.seekToBeginning(it.key.topic(), it.key.partition())
-        }
+        callback.seekToBeginning(assignments.keys)
     }
 }
