@@ -1,18 +1,17 @@
 package no.nav.tiltak.datadeling.kafka
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import jakarta.annotation.PostConstruct
 import no.nav.tiltak.datadeling.AvtaleRepository
 import no.nav.tiltak.datadeling.domene.Avtale
-import org.apache.kafka.common.TopicPartition
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
 import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.annotation.KafkaListener
-import org.springframework.kafka.listener.ConsumerSeekAware
+import org.springframework.kafka.listener.AbstractConsumerSeekAware
 import org.springframework.kafka.support.Acknowledgment
 import org.springframework.stereotype.Component
 import java.time.Duration
-import java.util.concurrent.atomic.AtomicBoolean
 
 @Profile("kafka")
 @Component
@@ -20,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class TiltakHendelseKafkaKonsument(
     val mapper: ObjectMapper,
     val avtaleRepository: AvtaleRepository
-) : ConsumerSeekAware {
+) : AbstractConsumerSeekAware() {
     val log = LoggerFactory.getLogger(javaClass)
 
     @KafkaListener(topics = ["\${tiltak-datadeling.kafka.topic}"])
@@ -36,15 +35,9 @@ class TiltakHendelseKafkaKonsument(
         }
     }
 
-    /**
-     * Når vi blir assigned til en partisjon, spol tilbake til start for å kverne igjennom all data på ny
-     */
-    override fun onPartitionsAssigned(assignments: MutableMap<TopicPartition, Long>, callback: ConsumerSeekAware.ConsumerSeekCallback) {
-        if (isReset.compareAndSet(false, true)) {
-            log.info("Resetter offset for $assignments")
-            callback.seekToBeginning(assignments.keys)
-        }
+    @PostConstruct
+    fun init() {
+        log.info("SEEKER TIL START")
+        seekToBeginning()
     }
 }
-
-val isReset = AtomicBoolean(false)
