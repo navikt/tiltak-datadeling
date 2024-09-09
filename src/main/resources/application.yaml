@@ -23,9 +23,10 @@ spring:
           location: ${KAFKA_TRUSTSTORE_PATH}
           password: ${KAFKA_CREDSTORE_PASSWORD}
     consumer:
-      group-id: "tiltak-datadeling"
+      group-id: "tiltak-datadeling-5"
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
   application:
     name: tiltak-datadeling
   main:
