@@ -52,8 +52,3 @@ management:
 tiltak-datadeling:
   kafka:
     topic: arbeidsgiver.tiltak-avtale-hendelse-compact
-logging:
-  level:
-    org:
-      jooq:
-        no-tips: true
