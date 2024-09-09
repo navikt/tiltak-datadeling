@@ -13,6 +13,6 @@ fun main(args: Array<String>) {
             println("Kan ikke startes uten miljøvariabel MILJO. Lokalt kan TiltakDatadelingApplication kjøres.")
             exitProcess(1)
         }
-        setAdditionalProfiles(System.getenv("MILJO"))
+        setAdditionalProfiles(System.getenv("MILJO"), "kafka")
     }
 }
