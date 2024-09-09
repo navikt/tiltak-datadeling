@@ -39,6 +39,7 @@ class TiltakHendelseKafkaKonsument(
      * Når vi blir assigned til en partisjon, spol tilbake til start for å kverne igjennom all data på ny
      */
     override fun onPartitionsAssigned(assignments: MutableMap<TopicPartition, Long>, callback: ConsumerSeekAware.ConsumerSeekCallback) {
+        log.info("Resetter offset for $assignments")
         assignments.forEach {
             callback.seekToBeginning(it.key.topic(), it.key.partition())
         }
