@@ -38,6 +38,7 @@ class TiltakHendelseKafkaKonsument(
     @PostConstruct
     fun init() {
         log.info("SEEKER TIL START")
+        log.info("Assignments: ${callbacksAndTopics.map { it.value }}")
         seekToBeginning()
     }
 }
