@@ -22,9 +22,9 @@ type Avtale {
     stillingstype: Stillingstype
     godkjentAvNavIdent: String
     godkjentAvBeslutterNavIdent: String
-    gyldig_fra_tidspunkt: DateTime
-    gyldig_til_tidspunkt: DateTime
-    registrert_tidspunkt: DateTime
+    gyldigFraTidspunkt: DateTime
+    gyldigTilTidspunkt: DateTime
+    registrertTidspunkt: DateTime
 }
 
 enum AvtaleStatus {
