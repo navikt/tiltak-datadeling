@@ -9,6 +9,17 @@ spec:
   env:
     - name: MILJO
       value: dev-gcp
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_16
+        tier: db-f1-micro
+        cascadingDelete: false
+        highAvailability: false
+        diskAutoresize: true
+        diskAutoresizeLimit: 60
+        databases:
+          - name: tiltak-datadeling
+            envVarPrefix: DB
   kafka:
     pool: nav-dev
   image: {{image}}
@@ -38,12 +49,11 @@ spec:
       enabled: true
     sidecar:
       enabled: true
-  openSearch:
-    instance: datadeling
-    access: admin
   accessPolicy:
     inbound:
       rules:
         - application: wonderwalled-azure
           namespace: aura
           cluster: dev-gcp
+        - application: tiltakshistorikk
+          namespace: team-mulighetsrommet

@@ -1,18 +1,21 @@
 # tiltak-datadeling
 API for deling av team tiltak-data internt i Nav
 
-## Kjøre tester med Colima
-> During my tests, I couldn't make ryuk work with colima out of the box. I managed to do it by starting the VM with an assigned IP and then overriding TESTCONTAINERS_HOST_OVERRIDE with it.
-From that point onwards, together with what is described in the documentation, all my project's tests worked flawlessly.
+## Kjøre lokalt (og tester) med testcontainers og Colima
+For å kjøre lokalt, og å kjøre tester, må man legge til disse miljøvariablene:
+```shell
+DOCKER_HOST=unix://{HOME_PATH}/.colima/default/docker.sock
+TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
+```
 
-> Install Colima: brew install colima
-Install docker: brew install docker
-Start Colima with an assigned IP address: colima start --network-address
-Colima automatically creates and sets a docker context named colima, therefore docker commands on the command line work out of the box
-To use with testcontainers, make sure the following environment variables are set on your session:
-export TESTCONTAINERS_HOST_OVERRIDE=$(colima ls -j | jq -r '.address')
-export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
-export DOCKER_HOST=unix://$HOME/.colima/default/docker.sock
+Socket-path til colima (`DOCKER_HOST`) finner man ved å skrive:
+```shell
+colima status 2>&1 | grep socket | awk '{print $NF}' | sed 's/"//'
+```
+
+### Legge til miljøvariabler i templates
+For å legge til miljøvariabler i IntelliJ, gå til `Run/Debug Configurations` -> `Templates` -> `JUnit`/`Spring Boot`/`Kotlin` -> `Environment variables` og legg til variablene der.
+![run_templates.png](run_templates.png)
 
 ## Eksempel på Graphql-spørring
 

@@ -1,16 +1,36 @@
 spring:
-  kafka: null
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: "tiltak-datadeling-test"
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties:
+      security.protocol: PLAINTEXT
+      ssl:
+        keystore: null
+        truststore: null
+    listener:
+      ack-mode: manual
   graphql:
     path: '/graphql'
     graphiql:
       enabled: true
       path: '/graphiql'
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      connection-test-query: select 1
+      maximum-pool-size: 4
+  jooq:
+    sql-dialect: postgres
 
 tiltak-datadeling:
   kafka:
-    topic: arbeidsgiver.tiltak-avtale-hendelse-compact
-  opensearch:
-    index: test-index
-    url: dummy
-    username: dummy
-    password: dummy
+    topic: tiltak-datadeling-test

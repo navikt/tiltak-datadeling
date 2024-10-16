@@ -1,4 +1,15 @@
 spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_JDBC_URL}
+    hikari:
+      connection-test-query: select 1
+      maximum-pool-size: 4
+  jooq:
+    sql-dialect: postgres
+  sql:
+    init:
+      platform: postgres
   kafka:
     bootstrap-servers: ${KAFKA_BROKERS}
     properties:
@@ -12,9 +23,12 @@ spring:
           location: ${KAFKA_TRUSTSTORE_PATH}
           password: ${KAFKA_CREDSTORE_PASSWORD}
     consumer:
-      group-id: "tiltak-datadeling"
+      group-id: tiltak-datadeling
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+    listener:
+      ack-mode: manual
   application:
     name: tiltak-datadeling
   main:
@@ -40,8 +54,3 @@ management:
 tiltak-datadeling:
   kafka:
     topic: arbeidsgiver.tiltak-avtale-hendelse-compact
-  opensearch:
-    index: avtale
-    urlString: ${OPEN_SEARCH_URI}
-    username: ${OPEN_SEARCH_USERNAME}
-    password: ${OPEN_SEARCH_PASSWORD}

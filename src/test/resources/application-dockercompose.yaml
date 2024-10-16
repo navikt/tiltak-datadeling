@@ -1,4 +1,17 @@
 spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:55432/sample
+    hikari:
+      connection-test-query: select 1
+      maximum-pool-size: 4
+      username: sample
+      password: sample
+  jooq:
+    sql-dialect: postgres
+  sql:
+    init:
+      platform: postgres
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -32,8 +45,3 @@ management:
 tiltak-datadeling:
   kafka:
     topic: arbeidsgiver.tiltak-avtale-hendelse-compact
-  opensearch:
-    index: avtale
-    urlString: https://localhost:9200
-    username: admin
-    password: admin

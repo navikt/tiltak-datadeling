@@ -1,4 +1,4 @@
-# 02 - Vi lagrer data i Postgres (GCP)
+# 02 - Vi lagrer data i Postgres (CloudSQL i GCP)
 
 > [!WARNING]  
 > Work in progress
