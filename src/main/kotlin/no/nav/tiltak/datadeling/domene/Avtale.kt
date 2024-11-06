@@ -4,7 +4,6 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
-import no.nav.tiltak.datadeling.domene.Avtaleopphav
 
 data class Avtale(
     val avtaleId: UUID,
@@ -99,5 +98,5 @@ data class Avtale(
     val innholdType: InnholdType,
     val utførtAv: String?,
     val utførtAvRolle: AvtaleRolle,
-    val opphav: Avtaleopphav
+    val opphav: Avtaleopphav?
 )
