@@ -98,5 +98,6 @@ data class Avtale(
     val innholdType: InnholdType,
     val utførtAv: String?,
     val utførtAvRolle: AvtaleRolle,
-    val opphav: Avtaleopphav?
+    val opphav: Avtaleopphav?,
+    val forkortetGrunn: String?,
 )

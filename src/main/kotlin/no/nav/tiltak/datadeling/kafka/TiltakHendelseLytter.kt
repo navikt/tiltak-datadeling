@@ -1,6 +1,8 @@
 package no.nav.tiltak.datadeling.kafka
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.JsonParser
 import no.nav.tiltak.datadeling.AvtaleRepository
 import no.nav.tiltak.datadeling.FeiledeMeldingerRepository
 import no.nav.tiltak.datadeling.domene.Avtale
@@ -29,6 +31,7 @@ class TiltakHendelseKafkaKonsument(
     fun avtaleHendelseLytter(record: ConsumerRecord<String, String>, acknowledgment: Acknowledgment) {
         try {
             log.info("Mottatt melding på topic")
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             val avtale = mapper.readValue(record.value(), Avtale::class.java)
             avtaleRepository.save(avtale)
             acknowledgment.acknowledge()
