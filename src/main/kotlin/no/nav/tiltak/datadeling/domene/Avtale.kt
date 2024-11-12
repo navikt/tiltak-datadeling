@@ -97,6 +97,5 @@ data class Avtale(
     val godkjentPaVegneAvArbeidsgiver: Boolean?,
     val innholdType: InnholdType,
     val utførtAv: String?,
-    val utførtAvRolle: AvtaleRolle,
-    val opphav: Avtaleopphav?
+    val utførtAvRolle: AvtaleRolle
 )
