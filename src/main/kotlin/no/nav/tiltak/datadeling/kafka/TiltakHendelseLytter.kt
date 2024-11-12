@@ -2,7 +2,6 @@ package no.nav.tiltak.datadeling.kafka
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.gson.JsonParser
 import no.nav.tiltak.datadeling.AvtaleRepository
 import no.nav.tiltak.datadeling.FeiledeMeldingerRepository
 import no.nav.tiltak.datadeling.domene.Avtale
