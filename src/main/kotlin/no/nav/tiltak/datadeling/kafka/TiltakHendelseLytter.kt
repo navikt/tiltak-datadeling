@@ -9,6 +9,7 @@ import no.nav.tiltak.datadeling.domene.Avtale
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.TopicPartition
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Profile
 import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.annotation.KafkaListener
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component
 @Component
 @EnableKafka
 class TiltakHendelseKafkaKonsument(
+    @Qualifier("jsonMapper")
     val mapper: ObjectMapper,
     val avtaleRepository: AvtaleRepository,
     val feiledeMeldingerRepository: FeiledeMeldingerRepository
