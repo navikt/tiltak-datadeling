@@ -32,7 +32,6 @@ class TiltakHendelseKafkaKonsument(
     fun avtaleHendelseLytter(record: ConsumerRecord<String, String>, acknowledgment: Acknowledgment) {
         try {
             log.info("Mottatt melding på topic")
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             val avtale = mapper.readValue(record.value(), Avtale::class.java)
             avtaleRepository.save(avtale)
             acknowledgment.acknowledge()
