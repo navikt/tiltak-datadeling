@@ -1,6 +1,5 @@
 package no.nav.tiltak.datadeling.kafka
 
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.tiltak.datadeling.AvtaleRepository
 import no.nav.tiltak.datadeling.FeiledeMeldingerRepository
