@@ -5,5 +5,6 @@ enum class AvtaleRolle {
     BESLUTTER,
     MENTOR,
     SYSTEM,
-    VEILEDER
+    VEILEDER,
+    DELTAKER
 }
