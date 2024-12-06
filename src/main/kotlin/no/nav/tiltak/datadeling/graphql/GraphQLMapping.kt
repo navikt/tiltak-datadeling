@@ -107,7 +107,8 @@ enum class HendelseTypeGQL {
     AVTALE_SLETTET,
     GODKJENT_FOR_ETTERREGISTRERING,
     FJERNET_ETTERREGISTRERING,
-    STATUSENDRING
+    STATUSENDRING,
+    OPPRETTET_AV_ARENA
 }
 
 enum class InkluderingstilskuddsutgiftTypeGQL {
