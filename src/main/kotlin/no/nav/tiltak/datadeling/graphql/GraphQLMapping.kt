@@ -107,8 +107,7 @@ enum class HendelseTypeGQL {
     AVTALE_SLETTET,
     GODKJENT_FOR_ETTERREGISTRERING,
     FJERNET_ETTERREGISTRERING,
-    STATUSENDRING,
-    OPPRETTET_AV_ARENA
+    STATUSENDRING
 }
 
 enum class InkluderingstilskuddsutgiftTypeGQL {
@@ -179,6 +178,7 @@ fun map(hendelseType: HendelseType): HendelseTypeGQL =
     when (hendelseType) {
         HendelseType.AVBRUTT -> HendelseTypeGQL.AVBRUTT
         HendelseType.OPPRETTET -> HendelseTypeGQL.OPPRETTET
+        HendelseType.OPPRETTET_AV_ARENA -> HendelseTypeGQL.OPPRETTET
         HendelseType.GODKJENT_AV_ARBEIDSGIVER -> HendelseTypeGQL.GODKJENT_AV_ARBEIDSGIVER
         HendelseType.GODKJENT_AV_VEILEDER -> HendelseTypeGQL.GODKJENT_AV_VEILEDER
         HendelseType.GODKJENT_AV_DELTAKER -> HendelseTypeGQL.GODKJENT_AV_DELTAKER
@@ -192,6 +192,7 @@ fun map(hendelseType: HendelseType): HendelseTypeGQL =
         HendelseType.DELT_MED_ARBEIDSGIVER -> HendelseTypeGQL.DELT_MED_ARBEIDSGIVER
         HendelseType.DELT_MED_MENTOR -> HendelseTypeGQL.DELT_MED_MENTOR
         HendelseType.ENDRET -> HendelseTypeGQL.ENDRET
+        HendelseType.ENDRET_AV_ARENA -> HendelseTypeGQL.ENDRET
         HendelseType.ANNULLERT -> HendelseTypeGQL.ANNULLERT
         HendelseType.LÅST_OPP -> HendelseTypeGQL.LAAST_OPP
         HendelseType.GJENOPPRETTET -> HendelseTypeGQL.GJENOPPRETTET
@@ -201,7 +202,9 @@ fun map(hendelseType: HendelseType): HendelseTypeGQL =
         HendelseType.TILSKUDDSPERIODE_AVSLATT -> HendelseTypeGQL.TILSKUDDSPERIODE_AVSLATT
         HendelseType.TILSKUDDSPERIODE_GODKJENT -> HendelseTypeGQL.TILSKUDDSPERIODE_GODKJENT
         HendelseType.AVTALE_FORKORTET -> HendelseTypeGQL.AVTALE_FORKORTET
+        HendelseType.AVTALE_FORKORTET_AV_ARENA -> HendelseTypeGQL.AVTALE_FORKORTET
         HendelseType.AVTALE_FORLENGET -> HendelseTypeGQL.AVTALE_FORLENGET
+        HendelseType.AVTALE_FORLENGET_AV_ARENA -> HendelseTypeGQL.AVTALE_FORLENGET
         HendelseType.MÅL_ENDRET -> HendelseTypeGQL.MAAL_ENDRET
         HendelseType.INKLUDERINGSTILSKUDD_ENDRET -> HendelseTypeGQL.INKLUDERINGSTILSKUDD_ENDRET
         HendelseType.OM_MENTOR_ENDRET -> HendelseTypeGQL.OM_MENTOR_ENDRET
