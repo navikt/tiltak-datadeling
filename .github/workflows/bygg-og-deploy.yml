@@ -56,20 +56,20 @@ jobs:
           RESOURCE: nais/dev-gcp.yml
           VAR: image=${{ needs.build.outputs.image }}
 
-#  deploy-prod:
-#    name: Deploy til prod-gcp
-#    runs-on: ubuntu-latest
-#    needs: build
-#    permissions:
-#      contents: read
-#      id-token: write
-#    steps:
-#      - name: Sjekk ut kode
-#        uses: actions/checkout@v4
-#
-#      - name: Deploy til prod-gcp
-#        uses: nais/deploy/actions/deploy@v2
-#        env:
-#          CLUSTER: prod-gcp
-#          RESOURCE: nais/prod-gcp.yml
-#          VAR: image=${{ needs.build.outputs.image }}
+  deploy-prod:
+    name: Deploy til prod-gcp
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+
+      - name: Deploy til prod-gcp
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod-gcp
+          RESOURCE: nais/prod-gcp.yml
+          VAR: image=${{ needs.build.outputs.image }}
