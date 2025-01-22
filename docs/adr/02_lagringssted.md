@@ -1,12 +1,9 @@
 # 02 - Vi lagrer data i Postgres (CloudSQL i GCP)
 
-> [!WARNING]  
-> Work in progress
-
 ## Kontekst
 
 For å kunne tilby et api for konsumenter av tiltaksdata må vi hente, transformere og lagre data fra databasen
-([ETL](https://en.wikipedia.org/wiki/Extract%2C_transform%2C_load)) til tiltaksgjennomforin-api. Konsumenter er ikke
+([ETL](https://en.wikipedia.org/wiki/Extract%2C_transform%2C_load)) til `tiltaksgjennomforing-api`. Konsumenter er ikke
 nødvendigvis interessert i all informasjon som ligger i datasettet, og noe informasjon fra databasen kan kreve for mye
 domenekunnskap.
 

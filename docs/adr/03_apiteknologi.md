@@ -1,7 +1,4 @@
-# 03 - Vi eksponerer et (OpenAPI-dokumentert rest-api/graphql-api)
-
-> [!WARNING]  
-> Work in progress
+# 03 - Vi eksponerer et graphql-api
 
 ## Kontekst
 
@@ -35,7 +32,7 @@ konsumentene (deres behandlingsgrunnlag, hvilke data de henter ut, og så videre
 
 ### Ulemper
 
-- GraphQL har høyere kompleksitet i forhold til tradisjonell REST
+- GraphQL har høyere kompleksitet i forhold til tradisjonell REST, og særegen syntaks
 - Teamet har ikke kjennskap til GraphQL (autorisasjon, versjonering, ytelse og lignende)
 - Rest-apier er enklere å forstå og bruke (feks via Curl)
 

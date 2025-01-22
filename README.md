@@ -1,6 +1,31 @@
 # tiltak-datadeling
 API for deling av team tiltak-data internt i Nav
 
+## Be om tilgang
+
+Vi ber om at våre konsumenter leser våre [bruksvilkår](docs/bruksvilkaar.md).
+
+For å be om tilgang, kontakt teamet på kanalen #arbeidsgiver-tiltak.
+Vi aksepterer også pull requests hvor nye applikasjoner legges til i appens accessPolicy:
+```yaml
+  accessPolicy:
+    inbound:
+      rules:
+        # LENKE TIL MIN BEHANDLINGSKATALOG
+        - application: <MIN-APP>
+          namespace: <MITT-NAMESPACE>
+          cluster: <MITT-CLUSTER>
+        # Eksempel:
+        # https://behandlingskatalog.intern.nav.no/process/system/TILTAKSGJENNOMFORING/780e3168-cf58-46ec-9764-a6cdd3da3b8f
+        - application: tiltaksgjennomforing-api
+          namespace: arbeidsgiver
+          cluster: dev-fss
+```
+
+## URL'er
+**dev-gcp:** https://tiltak-datadeling.intern.dev.nav.no/graphql (http://tiltak-datadeling.team-tiltak/graphql)<br/>
+**prod-gcp:** https://tiltak-datadeling.intern.nav.no/graphql (http://tiltak-datadeling.team-tiltak/graphql)
+
 ## Kjøre lokalt (og tester) med testcontainers og Colima
 For å kjøre lokalt, og å kjøre tester, må man legge til disse miljøvariablene:
 ```shell
@@ -24,118 +49,10 @@ For å legge til miljøvariabler i IntelliJ, gå til `Run/Debug Configurations` 
   avtalerForBedrift(organisasjonsnummer: "910825526") {
     avtaleId
     avtaleNr
-    opprettetTidspunkt
-    sistEndret
-    bedriftNr
     deltakerFnr
-    mentorFnr
+    bedriftNr
     veilederNavIdent
-    enhetGeografisk
-    enhetsnavnGeografisk
-    enhetOppfolging
-    enhetsnavnOppfolging
-    hendelseType
-    avtaleStatus
     tiltakstype
-    annullertTidspunkt
-    annullertGrunn
-    slettemerket
-    opprettetAvArbeidsgiver
-    godkjentForEtterregistrering
-    kvalifiseringsgruppe
-    formidlingsgruppe
-    feilregistrert
-    versjon
-    deltakerFornavn
-    deltakerEtternavn
-    deltakerTlf
-    bedriftNavn
-    arbeidsgiverFornavn
-    arbeidsgiverEtternavn
-    arbeidsgiverTlf
-    veilederFornavn
-    veilederEtternavn
-    veilederTlf
-    oppfolging
-    tilrettelegging
-    sluttDato
-    startDato
-    stillingprosent
-    journalpostId
-    arbeidsoppgaver
-    stillingstittel
-    stillingStyrk08
-    stillingKonseptId
-    antallDagerPerUke
-    refusjonKontaktperson {
-      refusjonKontaktpersonFornavn
-      refusjonKontaktpersonEtternavn
-      refusjonKontaktpersonTlf
-      onskerVarslingOmRefusjon
-    }
-    mentorFornavn
-    mentorEtternavn
-    mentorOppgaver
-    mentorAntallTimer
-    mentorTimelonn
-    mentorTlf
-    arbeidsgiverKontonummer
-    lonnstilskuddProsent
-    manedslonn
-    feriepengesats
-    arbeidsgiveravgift
-    harFamilietilknytning
-    familietilknytningForklaring
-    feriepengerBelop
-    otpSats
-    otpBelop
-    arbeidsgiveravgiftBelop
-    sumLonnsutgifter
-    sumLonnstilskudd
-    manedslonn100pst
-    sumLonnstilskuddRedusert
-    datoForRedusertProsent
-    stillingstype
-    maal {
-      id
-      kategori
-      beskrivelse
-    }
-    inkluderingstilskuddsutgift {
-      id
-      belop
-      type
-    }
-    inkluderingstilskuddBegrunnelse
-    inkluderingstilskuddTotalBelop
-    godkjentAvDeltaker
-    godkjentTaushetserklaeringAvMentor
-    godkjentAvArbeidsgiver
-    godkjentAvVeileder
-    godkjentAvBeslutter
-    avtaleInngaatt
-    ikrafttredelsestidspunkt
-    godkjentAvNavIdent
-    godkjentAvBeslutterNavIdent
-    enhetKostnadssted
-    enhetsnavnKostnadssted
-    godkjentPaVegneGrunn {
-      ikkeBankId
-      reservert
-      digitalKompetanse
-      arenaMigreringDeltaker
-    }
-    godkjentPaVegneAv
-    godkjentPaVegneAvArbeidsgiverGrunn {
-      klarerIkkeGiFaTilgang
-      vetIkkeHvemSomKanGiTilgang
-      farIkkeTilgangPersonvern
-      arenaMigreringArbeidsgiver
-    }
-    godkjentPaVegneAvArbeidsgiver
-    innholdType
-    utfortAv
-    utfortAvRolle
   }
 }
 ```

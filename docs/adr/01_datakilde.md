@@ -1,8 +1,5 @@
 # 01 - Vi oppretter et konsument-API via ny applikasjon
 
-> [!WARNING]  
-> Work in progress
-
 ## Kontekst
 
 Vår hovedkilde for data om avtaler er appen `tiltaksgjennomforing-api`. Når vi blir master for stadig flere tiltak,
@@ -24,11 +21,13 @@ Andre team får enkel tilgang til informasjon om arbeidsmarkedstiltak.
   og kan opprette et redusert datasett tilpasset konsumenter.
 - Høyt trykk fra konsumenter påvirker ikke `tiltaksgjennomforing-api`.
 - Vi kan eksponere data på en måte som er tilpasset konsumentenes behov.
+- Vi reduserer friksjon ved migrering av `tiltaksgjennomforing-api` ved senere tidspunkt
 
 ### Ulemper
 
 - Asynkron dataflyt er mer kompleks, spesielt i forhold til feilhåndtering.
-- Potensiale for "split brain" mellom datakilder.
+- Potensiale for "split brain" mellom datakilder (en avtale i `tiltaksgjennomforing-api`
+  er ikke i sync med `tiltak-datadeling`.
 - Risiko for at endringer i tiltaksgjennomforing-databasen ikke reflekteres i dataene på
   kafka-køen (feks når endringer har blitt gjort i databasen, og ikke via APIet)
 

@@ -8,22 +8,24 @@ metadata:
 spec:
   env:
     - name: MILJO
-      value: dev-gcp
+      value: prod-gcp
   gcp:
     sqlInstances:
       - type: POSTGRES_16
-        tier: db-f1-micro
+        tier: db-custom-1-3840
         cascadingDelete: false
-        highAvailability: false
+        highAvailability: true
         diskAutoresize: true
         diskAutoresizeLimit: 60
         databases:
           - name: tiltak-datadeling
             envVarPrefix: DB
   kafka:
-    pool: nav-dev
+    pool: nav-prod
   image: {{image}}
   port: 8080
+  replicas:
+    min: 2
   liveness:
     path: /internal/health/liveness
     initialDelay: 30
@@ -37,7 +39,7 @@ spec:
     periodSeconds: 30
     failureThreshold: 10
   ingresses:
-    - https://tiltak-datadeling.intern.dev.nav.no/
+    - https://tiltak-datadeling.intern.nav.no/
   strategy:
     type: RollingUpdate
   prometheus:
@@ -46,13 +48,6 @@ spec:
   azure:
     application:
       enabled: true
-    sidecar:
-      enabled: true
   accessPolicy:
     inbound:
-      rules:
-        - application: wonderwalled-azure
-          namespace: aura
-          cluster: dev-gcp
-        - application: tiltakshistorikk
-          namespace: team-mulighetsrommet
+      rules: []

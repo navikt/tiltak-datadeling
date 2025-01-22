@@ -20,11 +20,9 @@ CREATE TABLE avtale (
     stillingstype text,
     godkjent_av_nav_ident text,
     godkjent_av_beslutter_nav_ident text,
-    gyldig_fra timestamp with time zone NOT NULL,
-    gyldig_til timestamp with time zone,
-    registrert_tidspunkt timestamp with time zone NOT NULL
+    opprettet_tidspunkt timestamp with time zone NOT NULL,
+    endret_tidspunkt timestamp with time zone NOT NULL,
+    endring_mottatt_tidspunkt timestamp with time zone NOT NULL
 );
 
-create index avtale__gyldig_fra on avtale (gyldig_fra);
-create index avtale__gyldig_til on avtale (gyldig_til);
 create unique index avtale__avtale_id on avtale (avtale_id);
