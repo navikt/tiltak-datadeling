@@ -3,11 +3,6 @@ package no.nav.tiltak.datadeling.graphql
 import no.nav.tiltak.datadeling.db.tables.records.AvtaleRecord
 import no.nav.tiltak.datadeling.domene.AvtaleStatus
 import no.nav.tiltak.datadeling.domene.HendelseType
-import no.nav.tiltak.datadeling.domene.Inkluderingstilskuddsutgift
-import no.nav.tiltak.datadeling.domene.InkluderingstilskuddsutgiftType
-import no.nav.tiltak.datadeling.domene.InnholdType
-import no.nav.tiltak.datadeling.domene.Maal
-import no.nav.tiltak.datadeling.domene.MaalKategori
 import no.nav.tiltak.datadeling.domene.Stillingstype
 import no.nav.tiltak.datadeling.domene.Tiltakstype
 import java.time.LocalDate
@@ -35,25 +30,10 @@ data class AvtaleGQL(
     val stillingstype: Stillingstype?,
     val godkjentAvNavIdent: String?,
     val godkjentAvBeslutterNavIdent: String?,
-    val gyldigFraTidspunkt: ZonedDateTime?,
-    val gyldigTilTidspunkt: ZonedDateTime?,
-    val registrertTidspunkt: ZonedDateTime?
+    val endretTidspunkt: ZonedDateTime?,
+    val opprettetTidspunkt: ZonedDateTime?,
+    val endringMottattTidspunkt: ZonedDateTime?
 )
-
-enum class InnholdTypeGQL {
-    INNGAA,
-    LAASE_OPP,
-    FORLENGE,
-    FORKORTE,
-    ENDRE_MAAL,
-    ENDRE_INKLUDERINGSTILSKUDD,
-    ENDRE_OM_MENTOR,
-    ENDRE_TILSKUDDSBEREGNING,
-    ENDRE_STILLING,
-    ENDRE_KONTAKTINFO,
-    ENDRE_OPPFOLGING_OG_TILRETTELEGGING,
-    ANNULLERE
-}
 
 enum class AvtaleStatusGQL {
     ANNULLERT,
@@ -110,70 +90,6 @@ enum class HendelseTypeGQL {
     STATUSENDRING
 }
 
-enum class InkluderingstilskuddsutgiftTypeGQL {
-    TILRETTELEGGINGSBEHOV,
-    TILTAKSPLASS,
-    UTSTYR,
-    PROGRAMVARE,
-    ARBEIDSHJELPEMIDLER,
-    OPPLAERING,
-    FORSIKRING_LISENS_SERTIFISERING
-}
-
-data class InkluderingstilskuddsutgiftGQL(
-    val id: UUID,
-    val belop: Int,
-    val type: InkluderingstilskuddsutgiftTypeGQL
-)
-
-enum class MaalKategoriGQL {
-    FAA_JOBB_I_BEDRIFTEN,
-    ARBEIDSERFARING,
-    UTPROVING,
-    SPRAAKOPPLAERING,
-    OPPNAA_FAGBREV_KOMPETANSEBEVIS,
-    ANNET
-}
-
-data class MaalGQL(
-    val id: UUID,
-    val kategori: MaalKategoriGQL,
-    val beskrivelse: String
-)
-
-fun map(maal: Maal): MaalGQL = MaalGQL(
-    maal.id,
-    map(maal.kategori),
-    maal.beskrivelse,
-)
-
-fun map(maalKategori: MaalKategori): MaalKategoriGQL =
-    when (maalKategori) {
-        MaalKategori.UTPRØVING -> MaalKategoriGQL.UTPROVING
-        MaalKategori.FÅ_JOBB_I_BEDRIFTEN -> MaalKategoriGQL.FAA_JOBB_I_BEDRIFTEN
-        MaalKategori.ARBEIDSERFARING -> MaalKategoriGQL.ARBEIDSERFARING
-        MaalKategori.SPRÅKOPPLÆRING -> MaalKategoriGQL.SPRAAKOPPLAERING
-        MaalKategori.OPPNÅ_FAGBREV_KOMPETANSEBEVIS -> MaalKategoriGQL.OPPNAA_FAGBREV_KOMPETANSEBEVIS
-        MaalKategori.ANNET -> MaalKategoriGQL.ANNET
-    }
-
-fun map(inkluderingstilskuddsutgift: Inkluderingstilskuddsutgift) = InkluderingstilskuddsutgiftGQL(
-    id = inkluderingstilskuddsutgift.id,
-    belop = inkluderingstilskuddsutgift.beløp,
-    type = map(inkluderingstilskuddsutgift.type)
-)
-
-fun map(inkluderingstilskuddsutgiftType: InkluderingstilskuddsutgiftType) =
-    when (inkluderingstilskuddsutgiftType) {
-        InkluderingstilskuddsutgiftType.OPPLÆRING -> InkluderingstilskuddsutgiftTypeGQL.OPPLAERING
-        InkluderingstilskuddsutgiftType.TILRETTELEGGINGSBEHOV -> InkluderingstilskuddsutgiftTypeGQL.TILRETTELEGGINGSBEHOV
-        InkluderingstilskuddsutgiftType.TILTAKSPLASS -> InkluderingstilskuddsutgiftTypeGQL.TILTAKSPLASS
-        InkluderingstilskuddsutgiftType.UTSTYR -> InkluderingstilskuddsutgiftTypeGQL.UTSTYR
-        InkluderingstilskuddsutgiftType.PROGRAMVARE -> InkluderingstilskuddsutgiftTypeGQL.PROGRAMVARE
-        InkluderingstilskuddsutgiftType.ARBEIDSHJELPEMIDLER -> InkluderingstilskuddsutgiftTypeGQL.ARBEIDSHJELPEMIDLER
-        InkluderingstilskuddsutgiftType.FORSIKRING_LISENS_SERTIFISERING -> InkluderingstilskuddsutgiftTypeGQL.FORSIKRING_LISENS_SERTIFISERING
-    }
-
 fun map(hendelseType: HendelseType): HendelseTypeGQL =
     when (hendelseType) {
         HendelseType.AVBRUTT -> HendelseTypeGQL.AVBRUTT
@@ -224,22 +140,6 @@ fun map(hendelseType: HendelseType): HendelseTypeGQL =
         HendelseType.STATUSENDRING -> HendelseTypeGQL.STATUSENDRING
     }
 
-fun map(innholdType: InnholdType): InnholdTypeGQL =
-    when (innholdType) {
-        InnholdType.INNGÅ -> InnholdTypeGQL.INNGAA
-        InnholdType.LÅSE_OPP -> InnholdTypeGQL.LAASE_OPP
-        InnholdType.FORLENGE -> InnholdTypeGQL.FORLENGE
-        InnholdType.FORKORTE -> InnholdTypeGQL.FORKORTE
-        InnholdType.ENDRE_MÅL -> InnholdTypeGQL.ENDRE_MAAL
-        InnholdType.ENDRE_INKLUDERINGSTILSKUDD -> InnholdTypeGQL.ENDRE_INKLUDERINGSTILSKUDD
-        InnholdType.ENDRE_OM_MENTOR -> InnholdTypeGQL.ENDRE_OM_MENTOR
-        InnholdType.ENDRE_TILSKUDDSBEREGNING -> InnholdTypeGQL.ENDRE_TILSKUDDSBEREGNING
-        InnholdType.ENDRE_STILLING -> InnholdTypeGQL.ENDRE_STILLING
-        InnholdType.ENDRE_KONTAKTINFO -> InnholdTypeGQL.ENDRE_KONTAKTINFO
-        InnholdType.ENDRE_OPPFØLGING_OG_TILRETTELEGGING -> InnholdTypeGQL.ENDRE_OPPFOLGING_OG_TILRETTELEGGING
-        InnholdType.ANNULLERE -> InnholdTypeGQL.ANNULLERE
-    }
-
 fun map(avtaleStatus: AvtaleStatus): AvtaleStatusGQL =
     when (avtaleStatus) {
         AvtaleStatus.AVBRUTT -> AvtaleStatusGQL.AVBRUTT
@@ -284,59 +184,7 @@ fun map(avtaleRecord: AvtaleRecord): AvtaleGQL =
         stillingstype = avtaleRecord.stillingstype?.let { Stillingstype.valueOf(it) },
         godkjentAvNavIdent = avtaleRecord.godkjentAvNavIdent,
         godkjentAvBeslutterNavIdent = avtaleRecord.godkjentAvBeslutterNavIdent,
-        gyldigFraTidspunkt = avtaleRecord.gyldigFra.toZonedDateTime(),
-        gyldigTilTidspunkt = avtaleRecord.gyldigTil?.toZonedDateTime(),
-        registrertTidspunkt = avtaleRecord.registrertTidspunkt.toZonedDateTime()
+        endretTidspunkt = avtaleRecord.endretTidspunkt.toZonedDateTime(),
+        opprettetTidspunkt = avtaleRecord.opprettetTidspunkt.toZonedDateTime(),
+        endringMottattTidspunkt = avtaleRecord.endringMottattTidspunkt.toZonedDateTime()
     )
-
-//fun map(avtale: Avtale) = AvtaleGQL(
-//    avtaleId = avtale.avtaleId,
-//    avtaleNr = avtale.avtaleNr,
-//    opprettetTidspunkt = avtale.opprettetTidspunkt.atZone(ZoneId.systemDefault()),
-//    sistEndret = avtale.sistEndret.atZone(ZoneId.systemDefault()),
-//    bedriftNr = avtale.bedriftNr,
-//    deltakerFnr = avtale.deltakerFnr,
-//    //mentorFnr = avtale.mentorFnr,
-//    veilederNavIdent = avtale.veilederNavIdent,
-//    enhetGeografisk = avtale.enhetGeografisk,
-//    //enhetsnavnGeografisk = avtale.enhetsnavnGeografisk,
-//    enhetOppfolging = avtale.enhetOppfolging,
-//    //enhetsnavnOppfolging = avtale.enhetsnavnOppfolging,
-//    //hendelseType = map(avtale.hendelseType),
-//    avtaleStatus = map(no.nav.tiltak.datadeling.domene.AvtaleStatus.valueOf(avtale.avtaleStatus.name)),
-//    tiltakstype = Tiltakstype.valueOf(avtale.tiltakstype.name),
-//    annullertTidspunkt = avtale.annullertTidspunkt?.atZone(ZoneId.systemDefault()),
-//    opprettetAvArbeidsgiver = avtale.opprettetAvArbeidsgiver,
-//    godkjentForEtterregistrering = avtale.godkjentForEtterregistrering,
-////    kvalifiseringsgruppe = avtale.kvalifiseringsgruppe,
-////    formidlingsgruppe = avtale.formidlingsgruppe,
-////    tilskuddPeriode = avtale.tilskuddPeriode,
-//    feilregistrert = avtale.feilregistrert,
-////    versjon = avtale.versjon,
-////    deltakerFornavn = avtale.deltakerFornavn,
-////    deltakerEtternavn = avtale.deltakerEtternavn,
-////    deltakerTlf = avtale.deltakerTlf,
-////    bedriftNavn = avtale.bedriftNavn,
-////    arbeidsgiverFornavn = avtale.arbeidsgiverFornavn,
-////    arbeidsgiverEtternavn = avtale.arbeidsgiverEtternavn,
-////    arbeidsgiverTlf = avtale.arbeidsgiverTlf,
-////    veilederFornavn = avtale.veilederFornavn,
-////    veilederEtternavn = avtale.veilederEtternavn,
-////    veilederTlf = avtale.veilederTlf,
-////    oppfolging = avtale.oppfolging,
-////    tilrettelegging = avtale.tilrettelegging,
-//    sluttDato = avtale.sluttDato,
-//    startDato = avtale.startDato,
-////    stillingprosent = avtale.stillingprosent,
-////    journalpostId = avtale.journalpostId,
-//    godkjentAvDeltaker = avtale.godkjentAvDeltaker,
-//    godkjentAvArbeidsgiver = avtale.godkjentAvArbeidsgiver,
-//    godkjentAvVeileder = avtale.godkjentAvVeileder,
-////    godkjentAvBeslutter = avtale.godkjentAvBeslutter?.toLocalDateTime(),
-//    //avtaleInngaatt = avtale.av,
-////    enhetKostnadssted = avtale.enhetKostnadssted,
-////    godkjentPaVegneGrunn = avtale.godkjentPaVegneGrunn,
-////    godkjentPaVegneAv = avtale.godkjentPaVegneAv,
-////    godkjentPaVegneAvArbeidsgiverGrunn = avtale.godkjentPaVegneAvArbeidsgiverGrunn,
-////    godkjentPaVegneAvArbeidsgiver = avtale.godkjentPaVegneAvArbeidsgiver,
-//)

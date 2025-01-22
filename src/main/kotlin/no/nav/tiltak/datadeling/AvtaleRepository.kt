@@ -13,10 +13,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.util.*
-
-val MAKS_TID = OffsetDateTime.of(9999, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
 
 @Component
 class AvtaleRepository(
@@ -86,8 +83,8 @@ class AvtaleRepository(
             avtale.stillingstype?.name,
             avtale.godkjentAvNavIdent,
             avtale.godkjentAvBeslutterNavIdent,
+            avtale.opprettetTidspunkt.toOsloOffset(),
             avtale.sistEndret.toOsloOffset(),
-            MAKS_TID,
             OffsetDateTime.now()
         )
         // Og sett inn ny

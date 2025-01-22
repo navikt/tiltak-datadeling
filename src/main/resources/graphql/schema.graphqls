@@ -22,9 +22,9 @@ type Avtale {
     stillingstype: Stillingstype
     godkjentAvNavIdent: String
     godkjentAvBeslutterNavIdent: String
-    gyldigFraTidspunkt: DateTime
-    gyldigTilTidspunkt: DateTime
-    registrertTidspunkt: DateTime
+    opprettetTidspunkt: DateTime
+    endretTidspunkt: DateTime
+    endring_mottatt_tidspunkt: DateTime
 }
 
 enum AvtaleStatus {
@@ -35,67 +35,6 @@ enum AvtaleStatus {
     KLAR_FOR_OPPSTART
     GJENNOMFORES
     AVSLUTTET
-}
-
-type GodkjentPaVegneAvArbeidsgiverGrunn {
-    klarerIkkeGiFaTilgang: Boolean
-    vetIkkeHvemSomKanGiTilgang: Boolean
-    farIkkeTilgangPersonvern: Boolean
-    arenaMigreringArbeidsgiver: Boolean
-}
-
-type Inkluderingstilskuddsutgift {
-    id: ID
-    belop: Int
-    type: InkluderingstilskuddsutgiftType
-}
-
-enum InkluderingstilskuddsutgiftType {
-    TILRETTELEGGINGSBEHOV
-    TILTAKSPLASS
-    UTSTYR
-    PROGRAMVARE
-    ARBEIDSHJELPEMIDLER
-    OPPLAERING
-    FORSIKRING_LISENS_SERTIFISERING
-}
-
-type Maal {
-    id: ID
-    kategori: MaalKategori
-    beskrivelse: String
-}
-
-enum MaalKategori {
-    FAA_JOBB_I_BEDRIFTEN
-    ARBEIDSERFARING
-    UTPROVING
-    SPRAAKOPPLAERING
-    OPPNAA_FAGBREV_KOMPETANSEBEVIS
-    ANNET
-}
-
-enum Formidlingsgruppe {
-    ARBS
-    IARBS
-    IJOBS
-    ISERV
-    JOBBS
-    PARBS
-    RARBS
-}
-
-enum Kvalifiseringsgruppe {
-    BATT
-    BFORM
-    VARIG
-    BKART
-    IKVAL
-    IVURD
-    KAP11
-    OPPFI
-    VURDI
-    VURDU
 }
 
 enum Stillingstype {
@@ -110,20 +49,6 @@ scalar Date
 scalar DateTime
 scalar LocalDateTime
 
-type GodkjentPaVegneGrunn {
-    ikkeBankId: Boolean,
-    reservert: Boolean,
-    digitalKompetanse: Boolean,
-    arenaMigreringDeltaker: Boolean
-}
-
-type RefusjonKontaktperson {
-    refusjonKontaktpersonFornavn: String
-    refusjonKontaktpersonEtternavn: String
-    refusjonKontaktpersonTlf: String
-    onskerVarslingOmRefusjon: Boolean
-}
-
 enum Tiltakstype {
     ARBEIDSTRENING
     MIDLERTIDIG_LONNSTILSKUDD
@@ -131,29 +56,6 @@ enum Tiltakstype {
     MENTOR
     INKLUDERINGSTILSKUDD
     SOMMERJOBB
-}
-
-enum InnholdType {
-    INNGAA
-    LAASE_OPP
-    FORLENGE
-    FORKORTE
-    ENDRE_MAAL
-    ENDRE_INKLUDERINGSTILSKUDD
-    ENDRE_OM_MENTOR
-    ENDRE_TILSKUDDSBEREGNING
-    ENDRE_STILLING
-    ENDRE_KONTAKTINFO
-    ENDRE_OPPFOLGING_OG_TILRETTELEGGING
-    ANNULLERE
-}
-
-enum AvtaleRolle {
-    ARBEIDSGIVER
-    BESLUTTER
-    MENTOR
-    SYSTEM
-    VEILEDER
 }
 
 type Query {
