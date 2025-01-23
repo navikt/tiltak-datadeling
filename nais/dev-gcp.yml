@@ -54,5 +54,8 @@ spec:
         - application: wonderwalled-azure
           namespace: aura
           cluster: dev-gcp
+        - application: tiltak-admin
+          namespace: team-tiltak
+          cluster: dev-gcp
         - application: tiltakshistorikk
           namespace: team-mulighetsrommet
