@@ -20,7 +20,6 @@ import org.testcontainers.containers.PostgreSQLContainer
 @ActiveProfiles(profiles = ["test", "local", "kafka"])
 @SpringBootTest
 @DirtiesContext
-//@EmbeddedKafka(partitions = 1, brokerProperties = ["listeners=PLAINTEXT://localhost:9092", "port=9092"], topics = ["test-topic"])
 @ContextConfiguration(initializers = [TiltakDatadelingApplicationTests.Companion.Initializer::class])
 class TiltakDatadelingApplicationTests {
 

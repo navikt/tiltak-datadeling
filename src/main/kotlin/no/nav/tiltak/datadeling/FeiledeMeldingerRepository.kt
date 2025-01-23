@@ -1,5 +1,6 @@
 package no.nav.tiltak.datadeling
 
+import no.nav.tiltak.datadeling.db.tables.records.FeiledeMeldingerRecord
 import no.nav.tiltak.datadeling.db.tables.references.FEILEDE_MELDINGER
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.jooq.impl.DefaultDSLContext
@@ -14,5 +15,11 @@ class FeiledeMeldingerRepository(
             .set(FEILEDE_MELDINGER.KAFKA_KEY, record.key())
             .set(FEILEDE_MELDINGER.PAYLOAD, record.value())
             .set(FEILEDE_MELDINGER.FEILMELDING, e.message)
+            .execute()
+    }
+
+    fun hentFeiledeMeldinger(): List<FeiledeMeldingerRecord> {
+        return dslContext.selectFrom(FEILEDE_MELDINGER)
+            .map{it};
     }
 }
