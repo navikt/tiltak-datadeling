@@ -13,7 +13,7 @@ data class Avtale(
     val bedriftNr: String,
     val deltakerFnr: String,
     val veilederNavIdent: String?,
-    val hendelseType: HendelseType,
+    //val hendelseType: HendelseType,
     val avtaleStatus: AvtaleStatus,
     val tiltakstype: Tiltakstype,
     val versjon: Int,
