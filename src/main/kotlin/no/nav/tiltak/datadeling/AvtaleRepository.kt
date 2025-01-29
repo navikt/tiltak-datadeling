@@ -55,12 +55,6 @@ class AvtaleRepository(
             .map { map(it) }
 
     fun save(avtale: Avtale): AvtaleRecord? = dslContext.transactionResult { it ->
-        // Sett gyldig-til for forrige versjon (hvis vi har en tidligere versjon)
-//        it.dsl().deleteFrom(AVTALE)
-//            .where(AVTALE.AVTALE_ID.eq(avtale.avtaleId))
-//            .and(AVTALE.GYLDIG_TIL.eq(MAKS_TID))
-//            .execute()
-
         val nyAvtaleRecord = AvtaleRecord(
             null,
             avtale.avtaleId,
@@ -91,6 +85,7 @@ class AvtaleRepository(
         return@transactionResult it.dsl().insertInto(AVTALE)
             .set(nyAvtaleRecord).onConflict(AVTALE.AVTALE_ID)
             .doUpdate().set(nyAvtaleRecord)
+            .where(AVTALE.ENDRET_TIDSPUNKT.le(avtale.sistEndret.toOsloOffset()))
             .returning()
             .fetchOneInto(AvtaleRecord::class.java)
     }
@@ -99,5 +94,5 @@ class AvtaleRepository(
 }
 
 private val osloSone = ZoneId.of("Europe/Oslo")
-private fun Instant.toOsloOffset(): OffsetDateTime = this.atZone(osloSone).toOffsetDateTime()
-private fun LocalDateTime.toOsloOffset(): OffsetDateTime = this.atZone(osloSone).toOffsetDateTime()
+fun Instant.toOsloOffset(): OffsetDateTime = this.atZone(osloSone).toOffsetDateTime()
+fun LocalDateTime.toOsloOffset(): OffsetDateTime = this.atZone(osloSone).toOffsetDateTime()

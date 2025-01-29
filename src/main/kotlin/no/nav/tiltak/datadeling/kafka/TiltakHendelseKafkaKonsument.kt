@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.tiltak.datadeling.AvtaleRepository
 import no.nav.tiltak.datadeling.FeiledeMeldingerRepository
 import no.nav.tiltak.datadeling.domene.Avtale
+import no.nav.tiltak.datadeling.toOsloOffset
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -30,11 +31,16 @@ class TiltakHendelseKafkaKonsument(
         try {
             log.info("Mottatt melding på topic")
             val avtale = mapper.readValue(record.value(), Avtale::class.java)
-            avtaleRepository.save(avtale)
+            log.info("Lagrer avtale {}, endret {}", avtale.avtaleId, avtale.sistEndret)
+            val lagretAvtale = avtaleRepository.save(avtale)
+            if (lagretAvtale == null) {
+                log.info("Avtale {} ble ikke oppdatert", avtale.avtaleId)
+            } else if (lagretAvtale.endretTidspunkt == avtale.sistEndret.toOsloOffset()) {
+                log.info("Avtale {} ble oppdatert, samme endret-tidspunkt", avtale.avtaleId)
+            }
         } catch (ex: Exception) {
             log.error("Feil oppstod ved henting av kafkamelding", ex)
             feiledeMeldingerRepository.save(record, ex)
-
         } finally {
             acknowledgment.acknowledge()
         }
