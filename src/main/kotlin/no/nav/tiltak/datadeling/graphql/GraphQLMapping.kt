@@ -87,7 +87,8 @@ enum class HendelseTypeGQL {
     AVTALE_SLETTET,
     GODKJENT_FOR_ETTERREGISTRERING,
     FJERNET_ETTERREGISTRERING,
-    STATUSENDRING
+    STATUSENDRING,
+    PATCH
 }
 
 fun map(hendelseType: HendelseType): HendelseTypeGQL =
@@ -138,6 +139,7 @@ fun map(hendelseType: HendelseType): HendelseTypeGQL =
         HendelseType.GODKJENT_FOR_ETTERREGISTRERING -> HendelseTypeGQL.GODKJENT_FOR_ETTERREGISTRERING
         HendelseType.FJERNET_ETTERREGISTRERING -> HendelseTypeGQL.FJERNET_ETTERREGISTRERING
         HendelseType.STATUSENDRING -> HendelseTypeGQL.STATUSENDRING
+        HendelseType.PATCH -> HendelseTypeGQL.PATCH
     }
 
 fun map(avtaleStatus: AvtaleStatus): AvtaleStatusGQL =
