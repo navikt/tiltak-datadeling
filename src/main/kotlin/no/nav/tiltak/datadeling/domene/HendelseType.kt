@@ -46,5 +46,6 @@ enum class HendelseType(tekst: String) {
     AVTALE_SLETTET("Avtale slettet av veileder"),
     GODKJENT_FOR_ETTERREGISTRERING("Avtale er godkjent for etterregistrering"),
     FJERNET_ETTERREGISTRERING("Fjernet etterregistrering på avtale"),
-    STATUSENDRING("Statusendring")
+    STATUSENDRING("Statusendring"),
+    PATCH("Rette opp feil fra tidligere avtalemelding")
 }
