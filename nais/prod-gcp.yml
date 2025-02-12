@@ -54,3 +54,4 @@ spec:
         # https://behandlingskatalog.intern.nav.no/process/team/aa730c95-b437-497b-b1ae-0ccf69a10997/435e06e3-7d06-4331-9b99-46cc9a6e58aa
         - application: tiltakshistorikk
           namespace: team-mulighetsrommet
+          
