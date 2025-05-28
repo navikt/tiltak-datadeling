@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.4.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.nav.tiltak</groupId>
@@ -15,8 +15,8 @@
     <description>tiltak-datadeling</description>
     <properties>
         <java.version>21</java.version>
-        <kotlin.version>1.9.22</kotlin.version>
-        <jooq.version>3.19.6</jooq.version>
+        <kotlin.version>2.1.10</kotlin.version>
+        <jooq.version>3.19.10</jooq.version>
         <graphql-extended.version>21.0</graphql-extended.version>
     </properties>
     <dependencies>
@@ -137,7 +137,6 @@
                     <jvmTarget>${java.version}</jvmTarget>
                     <compilerPlugins>
                         <plugin>spring</plugin>
-                        <!--                        <plugin>jpa</plugin>-->
                     </compilerPlugins>
                 </configuration>
                 <dependencies>
