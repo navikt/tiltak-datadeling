@@ -59,6 +59,7 @@ jobs:
   deploy-prod:
     name: Deploy til prod-gcp
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     needs: build
     permissions:
       contents: read
