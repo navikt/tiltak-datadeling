@@ -17,8 +17,13 @@ spec:
         highAvailability: true
         diskAutoresize: true
         diskAutoresizeLimit: 60
+        flags:
+          - name: cloudsql.logical_decoding # flagget som må settes for bigquery greier
+            value: "on" # flagget som må settes
         databases:
           - name: tiltak-datadeling
+            users:
+              - name: datastream
             envVarPrefix: DB
   kafka:
     pool: nav-prod
