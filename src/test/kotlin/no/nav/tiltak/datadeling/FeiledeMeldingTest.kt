@@ -1,6 +1,6 @@
 package no.nav.tiltak.datadeling
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.nav.tiltak.datadeling.domene.AvtaleMapper
 import no.nav.tiltak.datadeling.kafka.TiltakHendelseKafkaKonsument
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.junit.jupiter.api.Assertions
@@ -20,18 +20,22 @@ class FeiledeMeldingTest {
 
     @Autowired
     lateinit var feiledeMeldingerRepository: FeiledeMeldingerRepository
+
     @Autowired
     lateinit var avtaleRepository: AvtaleRepository
+
+    @Autowired
+    lateinit var avtaleMapper: AvtaleMapper
 
 
     @Test
     fun `feilmelding lagres i egen logg`() {
-        val lytter = TiltakHendelseKafkaKonsument(jacksonObjectMapper(), avtaleRepository, feiledeMeldingerRepository)
+        val lytter = TiltakHendelseKafkaKonsument(avtaleMapper, avtaleRepository, feiledeMeldingerRepository)
         var acked = false;
 
         lytter.avtaleHendelseLytter(
             ConsumerRecord("test", 0, 0, "avtale-melding", "poison-pill"),
-            object: Acknowledgment {
+            object : Acknowledgment {
                 override fun acknowledge() {
                     acked = true
                 }

@@ -1,17 +1,18 @@
 package no.nav.tiltak.datadeling.kafka
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.tiltak.datadeling.AvtaleRepository
 import no.nav.tiltak.datadeling.FeiledeMeldingerRepository
-import no.nav.tiltak.datadeling.domene.Avtale
+import no.nav.tiltak.datadeling.domene.AvtaleMapper
 import no.nav.tiltak.datadeling.toOsloOffset
 import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.apache.kafka.common.TopicPartition
+import org.jooq.JSON
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Profile
 import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.listener.AbstractConsumerSeekAware
+import org.springframework.kafka.listener.ConsumerSeekAware
 import org.springframework.kafka.support.Acknowledgment
 import org.springframework.stereotype.Component
 
@@ -19,8 +20,7 @@ import org.springframework.stereotype.Component
 @Component
 @EnableKafka
 class TiltakHendelseKafkaKonsument(
-    @Qualifier("jsonMapper")
-    val mapper: ObjectMapper,
+    val avtaleMapper: AvtaleMapper,
     val avtaleRepository: AvtaleRepository,
     val feiledeMeldingerRepository: FeiledeMeldingerRepository
 ) : AbstractConsumerSeekAware() {
@@ -30,7 +30,8 @@ class TiltakHendelseKafkaKonsument(
     fun avtaleHendelseLytter(record: ConsumerRecord<String, String>, acknowledgment: Acknowledgment) {
         try {
             log.info("Mottatt melding på topic")
-            val avtale = mapper.readValue(record.value(), Avtale::class.java)
+            val avtale = avtaleMapper.tilAvtale(record.value())
+            avtale.rawJson = JSON.jsonOrNull(record.value())
             log.info("Lagrer avtale {}, endret {}", avtale.avtaleId, avtale.sistEndret)
             val lagretAvtale = avtaleRepository.save(avtale)
             if (lagretAvtale == null) {
@@ -46,8 +47,8 @@ class TiltakHendelseKafkaKonsument(
         }
     }
 
-//    override fun onPartitionsAssigned(assignments: MutableMap<TopicPartition, Long>, callback: ConsumerSeekAware.ConsumerSeekCallback) {
-//        super.onPartitionsAssigned(assignments, callback)
-//        callback.seekToBeginning(assignments.keys)
-//    }
+    override fun onPartitionsAssigned(assignments: MutableMap<TopicPartition, Long>, callback: ConsumerSeekAware.ConsumerSeekCallback) {
+        super.onPartitionsAssigned(assignments, callback)
+        callback.seekToBeginning(assignments.keys)
+    }
 }

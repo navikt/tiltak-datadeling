@@ -79,7 +79,8 @@ class AvtaleRepository(
             avtale.godkjentAvBeslutterNavIdent,
             avtale.opprettetTidspunkt.toOsloOffset(),
             avtale.sistEndret.toOsloOffset(),
-            OffsetDateTime.now()
+            OffsetDateTime.now(),
+            avtale.rawJson
         )
         // Og sett inn ny
         return@transactionResult it.dsl().insertInto(AVTALE)
