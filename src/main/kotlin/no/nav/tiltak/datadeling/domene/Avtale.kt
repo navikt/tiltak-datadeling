@@ -1,5 +1,7 @@
 package no.nav.tiltak.datadeling.domene
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import org.jooq.JSON
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -28,5 +30,8 @@ data class Avtale(
     val godkjentAvNavIdent: String?,
     val godkjentAvBeslutterNavIdent: String?,
     val godkjentPaVegneAv: Boolean?,
-    val godkjentPaVegneAvArbeidsgiver: Boolean?
+    val godkjentPaVegneAvArbeidsgiver: Boolean?,
+
+    @JsonIgnore
+    var rawJson: JSON? = null
 )
