@@ -13,6 +13,9 @@ type Avtale {
     avtaleInngaatt: DateTime
     startDato: Date
     sluttDato: Date
+    deltakersStillingsprosent: Int
+    mentorsStillingsprosent: Int
+    antallDagerPerUke: Float
     godkjentAvDeltaker: DateTime
     godkjentAvArbeidsgiver: DateTime
     godkjentAvVeileder: DateTime

@@ -32,7 +32,10 @@ data class AvtaleGQL(
     val godkjentAvBeslutterNavIdent: String?,
     val endretTidspunkt: ZonedDateTime?,
     val opprettetTidspunkt: ZonedDateTime?,
-    val endringMottattTidspunkt: ZonedDateTime?
+    val endringMottattTidspunkt: ZonedDateTime?,
+    val deltakersStillingsprosent: Int?,
+    val mentorsStillingsprosent: Int?,
+    val antallDagerPerUke: Double?
 )
 
 enum class AvtaleStatusGQL {
@@ -188,5 +191,8 @@ fun map(avtaleRecord: AvtaleRecord): AvtaleGQL =
         godkjentAvBeslutterNavIdent = avtaleRecord.godkjentAvBeslutterNavIdent,
         endretTidspunkt = avtaleRecord.endretTidspunkt.toZonedDateTime(),
         opprettetTidspunkt = avtaleRecord.opprettetTidspunkt.toZonedDateTime(),
-        endringMottattTidspunkt = avtaleRecord.endringMottattTidspunkt.toZonedDateTime()
+        endringMottattTidspunkt = avtaleRecord.endringMottattTidspunkt.toZonedDateTime(),
+        deltakersStillingsprosent = avtaleRecord.deltakersStillingsprosent,
+        mentorsStillingsprosent = avtaleRecord.mentorsStillingsprosent,
+        antallDagerPerUke = avtaleRecord.antallDagerPerUke
     )

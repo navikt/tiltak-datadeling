@@ -3,7 +3,6 @@ package no.nav.tiltak.datadeling.kafka
 import no.nav.tiltak.datadeling.AvtaleRepository
 import no.nav.tiltak.datadeling.FeiledeMeldingerRepository
 import no.nav.tiltak.datadeling.domene.AvtaleMapper
-import no.nav.tiltak.datadeling.toOsloOffset
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
@@ -28,11 +27,9 @@ class TiltakHendelseKafkaKonsument(
             log.info("Mottatt melding på topic")
             val avtale = avtaleMapper.tilAvtale(record.value())
             log.info("Lagrer avtale {}, endret {}", avtale.avtaleId, avtale.sistEndret)
-            val lagretAvtale = avtaleRepository.save(avtale)
+            val lagretAvtale = avtaleRepository.upsertHvisNyereEllerSamtidig(avtale)
             if (lagretAvtale == null) {
                 log.info("Avtale {} ble ikke oppdatert", avtale.avtaleId)
-            } else if (lagretAvtale.endretTidspunkt == avtale.sistEndret.toOsloOffset()) {
-                log.info("Avtale {} ble oppdatert, samme endret-tidspunkt", avtale.avtaleId)
             }
         } catch (ex: Exception) {
             log.error("Feil oppstod ved henting av kafkamelding", ex)

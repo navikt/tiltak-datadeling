@@ -54,7 +54,7 @@ class AvtaleRepository(
             .where(condition)
             .map { map(it) }
 
-    fun save(avtale: Avtale): AvtaleRecord? = dslContext.transactionResult { it ->
+    fun upsertHvisNyereEllerSamtidig(avtale: Avtale): AvtaleRecord? = dslContext.transactionResult { it ->
         val nyAvtaleRecord = AvtaleRecord(
             null,
             avtale.avtaleId,
@@ -80,7 +80,10 @@ class AvtaleRepository(
             avtale.opprettetTidspunkt.toOsloOffset(),
             avtale.sistEndret.toOsloOffset(),
             OffsetDateTime.now(),
-            avtale.rawJson
+            avtale.rawJson,
+            antallDagerPerUke = avtale.antallDagerPerUke,
+            deltakersStillingsprosent = avtale.deltakersStillingsprosent(),
+            mentorsStillingsprosent = avtale.mentorsStillingsprosent()
         )
         // Og sett inn ny
         return@transactionResult it.dsl().insertInto(AVTALE)
@@ -91,9 +94,16 @@ class AvtaleRepository(
             .fetchOneInto(AvtaleRecord::class.java)
     }
 
-    fun count() = dslContext.fetchCount(AVTALE);
+    fun count() = dslContext.fetchCount(AVTALE)
 }
 
 private val osloSone = ZoneId.of("Europe/Oslo")
+
+/**
+ * JOOQ vil ikke ha instant, så vi konverterer til OffsetDateTime
+ */
 fun Instant.toOsloOffset(): OffsetDateTime = this.atZone(osloSone).toOffsetDateTime()
+/**
+ * JOOQ vil ikke ha instant, så vi konverterer til OffsetDateTime
+ */
 fun LocalDateTime.toOsloOffset(): OffsetDateTime = this.atZone(osloSone).toOffsetDateTime()

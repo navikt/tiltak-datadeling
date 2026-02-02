@@ -15,13 +15,14 @@ data class Avtale(
     val bedriftNr: String,
     val deltakerFnr: String,
     val veilederNavIdent: String?,
-    //val hendelseType: HendelseType,
     val avtaleStatus: AvtaleStatus,
     val tiltakstype: Tiltakstype,
     val versjon: Int,
     val startDato: LocalDate?,
     val sluttDato: LocalDate?,
     val stillingstype: Stillingstype?,
+    val stillingprosent: Int?,
+    val antallDagerPerUke: Double?,
     val godkjentAvDeltaker: LocalDateTime?,
     val godkjentAvArbeidsgiver: LocalDateTime?,
     val godkjentAvVeileder: LocalDateTime?,
@@ -34,4 +35,18 @@ data class Avtale(
 
     @JsonIgnore
     var rawJson: JSON? = null
-)
+) {
+    fun deltakersStillingsprosent(): Int? {
+        return when (tiltakstype) {
+            Tiltakstype.MENTOR -> null
+            else -> stillingprosent
+        }
+    }
+
+    fun mentorsStillingsprosent(): Int? {
+        return when (tiltakstype) {
+            Tiltakstype.MENTOR -> stillingprosent
+            else -> null
+        }
+    }
+}
