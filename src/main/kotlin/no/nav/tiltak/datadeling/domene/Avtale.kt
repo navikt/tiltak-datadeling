@@ -22,7 +22,7 @@ data class Avtale(
     val startDato: LocalDate?,
     val sluttDato: LocalDate?,
     val stillingstype: Stillingstype?,
-    @field:JsonProperty("stillingprosent") private val stillingprosent: Int?,
+    @field:JsonProperty("stillingprosent") private val stillingprosent: Double?,
     val antallDagerPerUke: Double?,
     val godkjentAvDeltaker: LocalDateTime?,
     val godkjentAvArbeidsgiver: LocalDateTime?,
@@ -37,7 +37,7 @@ data class Avtale(
     @JsonIgnore
     var rawJson: JSON? = null
 ) {
-    fun deltakersStillingprosent(): Int? {
+    fun deltakersStillingprosent(): Double? {
         return when (tiltakstype) {
             Tiltakstype.MENTOR -> null
             else -> stillingprosent

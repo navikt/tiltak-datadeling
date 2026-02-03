@@ -33,7 +33,7 @@ data class AvtaleGQL(
     val endretTidspunkt: ZonedDateTime?,
     val opprettetTidspunkt: ZonedDateTime?,
     val endringMottattTidspunkt: ZonedDateTime?,
-    val stillingprosent: Int?,
+    val stillingprosent: Double?,
     val antallDagerPerUke: Double?,
 )
 
