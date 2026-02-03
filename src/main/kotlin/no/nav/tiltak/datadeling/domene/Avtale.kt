@@ -33,6 +33,7 @@ data class Avtale(
     val godkjentAvBeslutterNavIdent: String?,
     val godkjentPaVegneAv: Boolean?,
     val godkjentPaVegneAvArbeidsgiver: Boolean?,
+    val opphav: Opphav?,
 
     @JsonIgnore
     var rawJson: JSON? = null
