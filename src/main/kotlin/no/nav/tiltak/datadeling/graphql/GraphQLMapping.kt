@@ -34,7 +34,7 @@ data class AvtaleGQL(
     val opprettetTidspunkt: ZonedDateTime?,
     val endringMottattTidspunkt: ZonedDateTime?,
     val stillingprosent: Int?,
-    val antallDagerPerUke: Double?
+    val antallDagerPerUke: Double?,
 )
 
 enum class AvtaleStatusGQL {
