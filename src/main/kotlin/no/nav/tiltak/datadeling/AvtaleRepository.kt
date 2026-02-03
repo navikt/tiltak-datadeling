@@ -80,10 +80,10 @@ class AvtaleRepository(
             avtale.opprettetTidspunkt.toOsloOffset(),
             avtale.sistEndret.toOsloOffset(),
             OffsetDateTime.now(),
-            avtale.rawJson,
             antallDagerPerUke = avtale.antallDagerPerUke,
             deltakersStillingsprosent = avtale.deltakersStillingsprosent(),
-            mentorsStillingsprosent = avtale.mentorsStillingsprosent()
+            mentorsStillingsprosent = avtale.mentorsStillingsprosent(),
+            rawJson = avtale.rawJson,
         )
         // Og sett inn ny
         return@transactionResult it.dsl().insertInto(AVTALE)

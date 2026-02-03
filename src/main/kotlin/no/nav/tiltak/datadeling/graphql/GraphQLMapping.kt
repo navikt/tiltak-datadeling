@@ -194,5 +194,5 @@ fun map(avtaleRecord: AvtaleRecord): AvtaleGQL =
         endringMottattTidspunkt = avtaleRecord.endringMottattTidspunkt.toZonedDateTime(),
         deltakersStillingsprosent = avtaleRecord.deltakersStillingsprosent,
         mentorsStillingsprosent = avtaleRecord.mentorsStillingsprosent,
-        antallDagerPerUke = avtaleRecord.antallDagerPerUke
+        antallDagerPerUke = avtaleRecord.antallDagerPerUke,
     )
