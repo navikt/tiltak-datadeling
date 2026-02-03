@@ -33,8 +33,7 @@ data class AvtaleGQL(
     val endretTidspunkt: ZonedDateTime?,
     val opprettetTidspunkt: ZonedDateTime?,
     val endringMottattTidspunkt: ZonedDateTime?,
-    val deltakersStillingsprosent: Int?,
-    val mentorsStillingsprosent: Int?,
+    val stillingprosent: Int?,
     val antallDagerPerUke: Double?
 )
 
@@ -192,7 +191,6 @@ fun map(avtaleRecord: AvtaleRecord): AvtaleGQL =
         endretTidspunkt = avtaleRecord.endretTidspunkt.toZonedDateTime(),
         opprettetTidspunkt = avtaleRecord.opprettetTidspunkt.toZonedDateTime(),
         endringMottattTidspunkt = avtaleRecord.endringMottattTidspunkt.toZonedDateTime(),
-        deltakersStillingsprosent = avtaleRecord.deltakersStillingsprosent,
-        mentorsStillingsprosent = avtaleRecord.mentorsStillingsprosent,
+        stillingprosent = avtaleRecord.stillingprosent,
         antallDagerPerUke = avtaleRecord.antallDagerPerUke,
     )

@@ -81,8 +81,7 @@ class AvtaleRepository(
             avtale.sistEndret.toOsloOffset(),
             OffsetDateTime.now(),
             antallDagerPerUke = avtale.antallDagerPerUke,
-            deltakersStillingsprosent = avtale.deltakersStillingsprosent(),
-            mentorsStillingsprosent = avtale.mentorsStillingsprosent(),
+            stillingprosent = avtale.deltakersStillingprosent(),
             rawJson = avtale.rawJson,
         )
         // Og sett inn ny

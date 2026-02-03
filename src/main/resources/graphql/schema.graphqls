@@ -26,8 +26,7 @@ type Avtale {
     """
     Vil aldri være fylt ut for mentor-avtaler.
     """
-    deltakersStillingsprosent: Int
-    mentorsStillingsprosent: Int
+    stillingprosent: Int
     """
     Hvor mange arbeidsdager per uke deltakeren skal delta i tiltaket.
 

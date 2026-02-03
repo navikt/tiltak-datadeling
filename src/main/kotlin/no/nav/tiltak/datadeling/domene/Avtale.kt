@@ -1,6 +1,7 @@
 package no.nav.tiltak.datadeling.domene
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.jooq.JSON
 import java.time.Instant
 import java.time.LocalDate
@@ -21,7 +22,7 @@ data class Avtale(
     val startDato: LocalDate?,
     val sluttDato: LocalDate?,
     val stillingstype: Stillingstype?,
-    val stillingprosent: Int?,
+    @field:JsonProperty("stillingprosent") private val stillingprosent: Int?,
     val antallDagerPerUke: Double?,
     val godkjentAvDeltaker: LocalDateTime?,
     val godkjentAvArbeidsgiver: LocalDateTime?,
@@ -36,17 +37,10 @@ data class Avtale(
     @JsonIgnore
     var rawJson: JSON? = null
 ) {
-    fun deltakersStillingsprosent(): Int? {
+    fun deltakersStillingprosent(): Int? {
         return when (tiltakstype) {
             Tiltakstype.MENTOR -> null
             else -> stillingprosent
-        }
-    }
-
-    fun mentorsStillingsprosent(): Int? {
-        return when (tiltakstype) {
-            Tiltakstype.MENTOR -> stillingprosent
-            else -> null
         }
     }
 }
