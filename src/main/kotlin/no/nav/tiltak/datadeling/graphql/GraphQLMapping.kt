@@ -3,6 +3,7 @@ package no.nav.tiltak.datadeling.graphql
 import no.nav.tiltak.datadeling.db.tables.records.AvtaleRecord
 import no.nav.tiltak.datadeling.domene.AvtaleStatus
 import no.nav.tiltak.datadeling.domene.HendelseType
+import no.nav.tiltak.datadeling.domene.Opphav
 import no.nav.tiltak.datadeling.domene.Stillingstype
 import no.nav.tiltak.datadeling.domene.Tiltakstype
 import java.time.LocalDate
@@ -35,6 +36,7 @@ data class AvtaleGQL(
     val endringMottattTidspunkt: ZonedDateTime?,
     val stillingprosent: Double?,
     val antallDagerPerUke: Double?,
+    val opphav: Opphav?
 )
 
 enum class AvtaleStatusGQL {
@@ -193,4 +195,5 @@ fun map(avtaleRecord: AvtaleRecord): AvtaleGQL =
         endringMottattTidspunkt = avtaleRecord.endringMottattTidspunkt.toZonedDateTime(),
         stillingprosent = avtaleRecord.stillingprosent,
         antallDagerPerUke = avtaleRecord.antallDagerPerUke,
+        opphav = avtaleRecord.opphav?.let { Opphav.valueOf(it) },
     )

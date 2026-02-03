@@ -82,6 +82,7 @@ class AvtaleRepository(
             OffsetDateTime.now(),
             antallDagerPerUke = avtale.antallDagerPerUke,
             stillingprosent = avtale.deltakersStillingprosent(),
+            opphav = avtale.opphav?.name,
             rawJson = avtale.rawJson,
         )
         // Og sett inn ny

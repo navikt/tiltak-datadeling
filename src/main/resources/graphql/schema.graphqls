@@ -52,6 +52,21 @@ type Avtale {
     opprettetTidspunkt: DateTime
     endretTidspunkt: DateTime
     endring_mottatt_tidspunkt: DateTime
+    """
+    Hvor avtalen kommer fra. Avtaler kan opprettes av veiledere eller arbeidsgivere,
+    men i tillegg kan avtaler opprettes automatisk som følge av migrering fra Arena.
+    """
+    opphav: Opphav
+}
+
+"""
+Hvor avtalen kommer fra. Avtaler kan opprettes av veiledere eller arbeidsgivere,
+men i tillegg kan avtaler opprettes automatisk som følge av migrering fra Arena.
+"""
+enum Opphav {
+    VEILEDER
+    ARBEIDSGIVER
+    ARENA
 }
 
 enum AvtaleStatus {
