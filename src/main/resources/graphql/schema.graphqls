@@ -3,22 +3,45 @@ Avtale om tiltak
 """
 type Avtale {
     avtaleId: ID
+    """
+    Avtalenummer er den "menneskelige" id'en for en avtale. avtaleId og avtaleNr vil peke på samme avtale.
+    """
     avtaleNr: Int
     deltakerFnr: String
     bedriftNr: String
     veilederNavIdent: String
     tiltakstype: Tiltakstype
+    """
+    Avtalen får ny versjon når den endres etter å ha blitt inngått.
+    Alle endringer før inngåelse skjer på samme versjon.
+    """
     versjon: Int
     avtaleStatus: AvtaleStatus
+    """
+    Tidspunktet hvor avtalen er endelig avtalt mellom partene og godkjent.
+    """
     avtaleInngaatt: DateTime
     startDato: Date
     sluttDato: Date
+    """
+    Vil aldri være fylt ut for mentor-avtaler.
+    """
     deltakersStillingsprosent: Int
     mentorsStillingsprosent: Int
+    """
+    Hvor mange arbeidsdager per uke deltakeren skal delta i tiltaket.
+
+    Vil aldri være fylt ut for mentor-avtaler.
+    """
     antallDagerPerUke: Float
     godkjentAvDeltaker: DateTime
     godkjentAvArbeidsgiver: DateTime
     godkjentAvVeileder: DateTime
+    """
+    For tiltakstyper med penger involvert må en beslutter godkjenne før avtalen er endelig inngått.
+
+    For eksempel vil aldri en arbeidstrening ha en beslutter involvert.
+    """
     godkjentAvBeslutter: DateTime
     godkjentPaaVegneAv: Boolean
     godkjentPaaVegneAvArbeidsgiver: Boolean
@@ -32,9 +55,21 @@ type Avtale {
 
 enum AvtaleStatus {
     ANNULLERT
+    """
+    @deprecated(reason: "Alle fremtidige avtaler vil være ANNULLERT")
+    """
     AVBRUTT
+    """
+    En avtale kan gå frem og tilbake mellom PAABEGYNT og MANGLER_GODKJENNING flere ganger før den endelig inngås.
+    """
     PAABEGYNT
+    """
+    En avtale kan gå frem og tilbake mellom PAABEGYNT og MANGLER_GODKJENNING flere ganger før den endelig inngås.
+    """
     MANGLER_GODKJENNING
+    """
+    Denne statusen indikerer i praksis at en avtale er inngått, men har startdato i fremtiden.
+    """
     KLAR_FOR_OPPSTART
     GJENNOMFORES
     AVSLUTTET
