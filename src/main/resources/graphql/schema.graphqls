@@ -24,7 +24,7 @@ type Avtale {
     startDato: Date
     sluttDato: Date
     """
-    Deltakers stillingsprosent, representert som et tall fra 0-100%
+    Deltakers stillingprosent, representert som et tall fra 0-100%
 
     Vil aldri være fylt ut for mentor-avtaler.
     """
