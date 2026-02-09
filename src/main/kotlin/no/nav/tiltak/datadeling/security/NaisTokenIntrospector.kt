@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
+import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionException
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector
 import org.springframework.stereotype.Component
@@ -50,13 +51,7 @@ class NaisTokenIntrospector(
         }
         log.info("Er vurdert aktiv: $active")
 
-        val authorities = extractAuthorities(attributes)
-        val principalName = attributes["sub"]?.toString()
-            ?: attributes["client_id"]?.toString()
-            ?: "unknown"
-
-        log.info("Principal name: $principalName, authorities: ${authorities.joinToString(",")}")
-        return DefaultOAuth2AuthenticatedPrincipal(principalName, attributes, authorities)
+        return OAuth2IntrospectionAuthenticatedPrincipal(attributes, emptyList())
     }
 
     private fun extractAuthorities(attributes: Map<String, Any?>): Collection<GrantedAuthority> {
