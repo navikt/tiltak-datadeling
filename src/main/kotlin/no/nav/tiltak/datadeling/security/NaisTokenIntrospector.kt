@@ -5,10 +5,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.http.MediaType
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
+import org.springframework.security.oauth2.server.resource.introspection.BadOpaqueTokenException
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionException
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector
@@ -49,7 +47,7 @@ class NaisTokenIntrospector(
         val active = attributes["active"] as? Boolean
         if (active == false) {
             log.error("Token is not active")
-            throw OAuth2IntrospectionException("Token is not active")
+            throw BadOpaqueTokenException("Token is not active")
         }
         log.info("Er vurdert aktiv: $active")
 
