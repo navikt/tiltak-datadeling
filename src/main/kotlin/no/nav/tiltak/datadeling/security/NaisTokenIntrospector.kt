@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.server.resource.introspection.OpaqueT
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestClientException
+import java.time.Instant
 
 @Profile("!local")
 @Component
@@ -33,17 +34,18 @@ class NaisTokenIntrospector(
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(TokenIntrospectionRequest(identityProvider = "entra_id", token = token))
                 .retrieve()
-                .body(Map::class.java)
+                .body(MutableMap::class.java)
         } catch (ex: RestClientException) {
             log.error("Feil ved token introspeksjon", ex)
             throw OAuth2IntrospectionException("Token introspection failed", ex)
         }
 
-        val attributes = convertNumericDatesToInstant(response
+        val attributes = (response
             ?.entries
             ?.associate { it.key.toString() to it.value }
-            ?: emptyMap()
-        )
+            ?: emptyMap()).toMutableMap()
+
+        convertNumericDatesToInstant(attributes)
 
         val active = attributes["active"] as? Boolean
         if (active == false) {
@@ -55,13 +57,12 @@ class NaisTokenIntrospector(
         return OAuth2IntrospectionAuthenticatedPrincipal(attributes, emptyList())
     }
 
-    private fun convertNumericDatesToInstant(attributes: Map<String, Any?>): Map<String, Any?> {
-        return attributes.filterKeys { it === "iat" || it === "exp" }.mapValues { entry ->
-            if (entry.value is Number) {
-                val timestamp = (entry.value as Number).toLong()
-                java.time.Instant.ofEpochSecond(timestamp)
-            } else {
-                entry.value
+    private fun convertNumericDatesToInstant(attributes: MutableMap<String, Any?>) {
+        val dateKeys = listOf("exp", "iat", "nbf")
+        for (key in dateKeys) {
+            val value = attributes[key]
+            if (value is Number) {
+                attributes[key] = Instant.ofEpochSecond(value.toLong())
             }
         }
     }
