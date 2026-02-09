@@ -69,7 +69,7 @@ spec:
     inbound:
       rules:
         - application: wonderwalled-azure
-          namespace: aura
+          namespace: nais
           cluster: dev-gcp
         - application: tiltak-admin
           namespace: team-tiltak
