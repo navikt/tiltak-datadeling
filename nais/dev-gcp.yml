@@ -58,9 +58,10 @@ spec:
         - id: loki
   azure:
     application:
-      claims:
-        groups:
-          - id: '8322979a-a145-4799-8fa1-dba9578bfacd' # Testgruppe
+      allowAllUsers: true
+#      claims:
+#        groups:
+#          - id: '8322979a-a145-4799-8fa1-dba9578bfacd' # Testgruppe
       enabled: true
     sidecar:
       enabled: true
