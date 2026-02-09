@@ -1,6 +1,7 @@
 package no.nav.tiltak.datadeling.security
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.http.MediaType
@@ -20,9 +21,11 @@ class NaisTokenIntrospector(
     @Value("\${NAIS_TOKEN_INTROSPECTION_ENDPOINT}") private val endpoint: String,
     private val restClientBuilder: RestClient.Builder,
 ) : OpaqueTokenIntrospector {
+    val log = LoggerFactory.getLogger(javaClass)
     private val restClient: RestClient = restClientBuilder.build()
 
     override fun introspect(token: String): OAuth2AuthenticatedPrincipal {
+        log.info("Token-introspekt")
         val response = try {
             restClient.post()
                 .uri(endpoint)
@@ -31,6 +34,7 @@ class NaisTokenIntrospector(
                 .retrieve()
                 .body(Map::class.java)
         } catch (ex: RestClientException) {
+            log.error("Feil ved token introspeksjon", ex)
             throw OAuth2IntrospectionException("Token introspection failed", ex)
         }
 
@@ -41,14 +45,17 @@ class NaisTokenIntrospector(
 
         val active = attributes["active"] as? Boolean
         if (active == false) {
+            log.error("Token is not active")
             throw OAuth2IntrospectionException("Token is not active")
         }
+        log.info("Er vurdert aktiv: $active")
 
         val authorities = extractAuthorities(attributes)
         val principalName = attributes["sub"]?.toString()
             ?: attributes["client_id"]?.toString()
             ?: "unknown"
 
+        log.info("Principal name: $principalName, authorities: ${authorities.joinToString(",")}")
         return DefaultOAuth2AuthenticatedPrincipal(principalName, attributes, authorities)
     }
 
