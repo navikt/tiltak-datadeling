@@ -36,7 +36,6 @@ class NaisTokenIntrospector(
                 .retrieve()
                 .body(MutableMap::class.java)
         } catch (ex: RestClientException) {
-            log.error("Feil ved token introspeksjon", ex)
             throw OAuth2IntrospectionException("Token introspection failed", ex)
         }
 
@@ -65,17 +64,6 @@ class NaisTokenIntrospector(
                 attributes[key] = Instant.ofEpochSecond(value.toLong())
             }
         }
-    }
-
-    private fun extractAuthorities(attributes: Map<String, Any?>): Collection<GrantedAuthority> {
-        val authorities = mutableSetOf<GrantedAuthority>()
-        val groups = attributes["groups"]
-        if (groups is Collection<*>) {
-            groups.filterIsInstance<String>()
-                .map { SimpleGrantedAuthority("GROUP_$it") }
-                .forEach { authorities.add(it) }
-        }
-        return authorities
     }
 }
 
