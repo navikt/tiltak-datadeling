@@ -56,3 +56,18 @@ For å legge til miljøvariabler i IntelliJ, gå til `Run/Debug Configurations` 
   }
 }
 ```
+
+# OBS: Når nye kolonner legges til i databasen
+
+Når man legger til nye felter i datadeling (sjekk feks migreringen [V07__nye_felter.sql](src/main/resources/db/migration/V07__nye_felter.sql)),
+må man også sørge for at feltene blir tilgjengelig i Metabase. Datadeling har en datastrøm mellom cloudsql og bigquery,
+men i tillegg har Metabase et eget "view" på BigQuery-tabellen, som ikke oppdateres automatisk.
+
+Her er malen for spørringen man må kjøre i BigQuery for å oppdatere viewet:
+```sql
+CREATE OR REPLACE VIEW `<VIEW_NAVN>` AS
+<QUERY-DEFINISJON-TIL-VIEWET>;
+```
+
+Navnet på viewet finner man i Google Cloud-konsollen (BigQuery -> Studio -> <finn datasettet> -> <finn tabellen> -> View details -> View name). 
+Query-definisjonen finner man også i Details-visningen under "Query".
