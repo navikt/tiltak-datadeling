@@ -39,10 +39,11 @@ class NaisTokenIntrospector(
             throw OAuth2IntrospectionException("Token introspection failed", ex)
         }
 
-        val attributes = response
+        val attributes = convertNumericDatesToInstant(response
             ?.entries
             ?.associate { it.key.toString() to it.value }
             ?: emptyMap()
+        )
 
         val active = attributes["active"] as? Boolean
         if (active == false) {
@@ -52,6 +53,17 @@ class NaisTokenIntrospector(
         log.info("Er vurdert aktiv: $active")
 
         return OAuth2IntrospectionAuthenticatedPrincipal(attributes, emptyList())
+    }
+
+    private fun convertNumericDatesToInstant(attributes: Map<String, Any?>): Map<String, Any?> {
+        return attributes.filterKeys { it === "iat" || it === "exp" }.mapValues { entry ->
+            if (entry.value is Number) {
+                val timestamp = (entry.value as Number).toLong()
+                java.time.Instant.ofEpochSecond(timestamp)
+            } else {
+                entry.value
+            }
+        }
     }
 
     private fun extractAuthorities(attributes: Map<String, Any?>): Collection<GrantedAuthority> {
