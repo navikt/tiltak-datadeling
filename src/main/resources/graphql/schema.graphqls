@@ -111,6 +111,7 @@ enum Tiltakstype {
     INKLUDERINGSTILSKUDD
     SOMMERJOBB
     VTAO
+    FIREARIG_LONNSTILSKUDD
 }
 
 type Query {

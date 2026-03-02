@@ -7,5 +7,6 @@ enum class Tiltakstype {
     MENTOR,
     INKLUDERINGSTILSKUDD,
     SOMMERJOBB,
-    VTAO;
+    VTAO,
+    FIREARIG_LONNSTILSKUDD;
 }
