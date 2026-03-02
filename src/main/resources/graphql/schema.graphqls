@@ -104,13 +104,22 @@ scalar DateTime
 scalar LocalDateTime
 
 enum Tiltakstype {
+    "Arbeidstrening"
     ARBEIDSTRENING
+    "Midlertidig lønnstilskudd"
     MIDLERTIDIG_LONNSTILSKUDD
+    "Varig lønnstilskudd"
     VARIG_LONNSTILSKUDD
+    "Mentor"
     MENTOR
+    "Inkluderingstilskudd"
     INKLUDERINGSTILSKUDD
+    "Sommerjobb"
     SOMMERJOBB
+    "Varig tilrettelagt arbeid i ordinær virksomhet"
     VTAO
+    "Fireårig lønnstilskudd for unge"
+    FIREARIG_LONNSTILSKUDD
 }
 
 type Query {
