@@ -8,5 +8,6 @@ enum class Tiltakstype {
     INKLUDERINGSTILSKUDD,
     SOMMERJOBB,
     VTAO,
-    FIREARIG_LONNSTILSKUDD;
+    FIREARIG_LONNSTILSKUDD,
+    ;
 }
