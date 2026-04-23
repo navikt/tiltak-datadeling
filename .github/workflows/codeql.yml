@@ -33,7 +33,7 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@17f84c3641ba7b8f6deff6309fc4c864478f5d62 # ratchet:actions/setup-java@v3
         with:
-          java-version: 21
+          java-version: 25
           distribution: temurin
           cache: maven
 
