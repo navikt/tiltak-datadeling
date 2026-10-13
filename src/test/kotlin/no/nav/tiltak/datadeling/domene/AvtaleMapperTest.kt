@@ -1,8 +1,11 @@
 package no.nav.tiltak.datadeling.domene
 
 import org.jooq.JSON
-import org.junit.Test
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 class AvtaleMapperTest {
     private val avtaleMapper = AvtaleMapper()
@@ -15,5 +18,20 @@ class AvtaleMapperTest {
         val avtale = avtaleMapper.tilAvtale(json)
 
         Assertions.assertEquals(avtale.rawJson, JSON.jsonOrNull(json))
+    }
+
+    @Test
+    fun `mapper felter med norske tegn og datoer likt som før`() {
+        val json = """
+            {"avtaleId":"a3592491-c659-4262-b3ec-1d920527ff74","avtaleNr":426,"opprettetTidspunkt":"2022-08-30T12:05:39.70434","sistEndret":"2023-11-07T13:57:45.633871571Z","bedriftNr":"910825518","deltakerFnr":"00000000000","veilederNavIdent":"Z992785","avtaleStatus":"GJENNOMFØRES","tiltakstype":"ARBEIDSTRENING","versjon":1,"startDato":"2023-11-07","sluttDato":"2023-11-30","stillingprosent":50.0,"godkjentAvDeltaker":"2023-11-01T10:00:00","avtaleInngått":"2023-11-02T11:12:13.5","ukjentFelt":"ignoreres"}
+        """
+        val avtale = avtaleMapper.tilAvtale(json)
+
+        Assertions.assertEquals(LocalDateTime.parse("2022-08-30T12:05:39.70434"), avtale.opprettetTidspunkt)
+        Assertions.assertEquals(Instant.parse("2023-11-07T13:57:45.633871571Z"), avtale.sistEndret)
+        Assertions.assertEquals(LocalDate.parse("2023-11-07"), avtale.startDato)
+        Assertions.assertEquals(LocalDateTime.parse("2023-11-01T10:00:00"), avtale.godkjentAvDeltaker)
+        Assertions.assertEquals(LocalDateTime.parse("2023-11-02T11:12:13.5"), avtale.avtaleInngått)
+        Assertions.assertEquals(50.0, avtale.deltakersStillingprosent())
     }
 }
