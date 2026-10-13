@@ -1,8 +1,8 @@
 package no.nav.tiltak.datadeling;
 
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
-public class TiltakPostgresContainer extends PostgreSQLContainer<TiltakPostgresContainer> {
+public class TiltakPostgresContainer extends PostgreSQLContainer {
     private static final String IMAGE_VERSION = "postgres:17";
     private static TiltakPostgresContainer container;
 
