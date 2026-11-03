@@ -10,7 +10,7 @@ import tools.jackson.module.kotlin.jacksonMapperBuilder
 class AvtaleMapper() {
     private val mapper: JsonMapper = jacksonMapperBuilder()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        // Eldre Kafka-meldinger har avtaleNr: null, som Jackson 2 leste som 0.
+        // Hendelser for nye avtaler kan ha avtaleNr: null. Jackson 2 leste det som 0.
         .configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false)
         .build()
 
