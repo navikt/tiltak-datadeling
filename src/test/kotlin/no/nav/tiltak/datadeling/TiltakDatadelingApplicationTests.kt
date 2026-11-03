@@ -2,7 +2,6 @@ package no.nav.tiltak.datadeling
 
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.junit.ClassRule
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +13,7 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
 
 
 @ActiveProfiles(profiles = ["test", "local", "kafka"])
@@ -61,7 +60,6 @@ class TiltakDatadelingApplicationTests {
         }
 
         @JvmField
-        @ClassRule
-        var postgreSQLContainer: PostgreSQLContainer<TiltakPostgresContainer> = TiltakPostgresContainer.getInstance()
+        var postgreSQLContainer: PostgreSQLContainer = TiltakPostgresContainer.getInstance()
     }
 }

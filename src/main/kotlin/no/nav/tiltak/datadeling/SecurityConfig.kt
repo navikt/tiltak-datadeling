@@ -26,6 +26,10 @@ class SecurityConfig {
             .oauth2ResourceServer { oauth2: OAuth2ResourceServerConfigurer<HttpSecurity?> ->
                 oauth2
                     .jwt(Customizer.withDefaults())
+                    .protectedResourceMetadata { metadata ->
+                        // Azure AD-tokenene våre er ikke bundet til klientsertifikat (RFC 8705).
+                        metadata.protectedResourceMetadataCustomizer { it.tlsClientCertificateBoundAccessTokens(false) }
+                    }
             }
         return http.build()
     }

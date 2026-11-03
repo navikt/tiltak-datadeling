@@ -31,7 +31,8 @@ spring:
   main:
     banner-mode: "off"
   graphql:
-    path: '/graphql'
+    http:
+      path: '/graphql'
     graphiql:
       enabled: true
       path: '/graphiql'
