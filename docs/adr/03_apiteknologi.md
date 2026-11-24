@@ -1,5 +1,7 @@
 # 03 - Vi eksponerer et graphql-api
 
+**Status:** Erstattet av [ADR 04](04_fjerne_api.md)
+
 ## Kontekst
 
 For å dele data med andre team skal vi sette opp et API. Dermed må vi ta en avgjørelse på hvordan

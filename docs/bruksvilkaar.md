@@ -26,7 +26,7 @@ er dere ansvarlige for å sikre at opplysninger ikke kommer på avveie. Bruk PDL
 data om deltakere med adressebeskyttelse ved behov.
 
 Unngå gjerne "vide spørringer" som feks "hent fødselsnummer til alle som er på tiltak X", men spør heller
-så spesifikt som mulig, og inkluder så få felter som mulig i graphql-spørringen.
+så spesifikt som mulig, og inkluder så få felter som mulig i spørringen.
 
 Vi inkluderer ikke informasjon som kan identifisere om en deltaker har adressebeskyttelse eller ikke, dette
 har konsumenter ansvar for å slå opp selv via PDL ved behov.
