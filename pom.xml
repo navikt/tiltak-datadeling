@@ -17,20 +17,10 @@
         <java.version>25</java.version>
         <kotlin.version>2.3.21</kotlin.version>
         <jooq.version>3.19.10</jooq.version>
-        <graphql-extended.version>21.0</graphql-extended.version>
         <logback-encoder.version>9.0</logback-encoder.version>
         <postgres-testcontainers.version>1.21.4</postgres-testcontainers.version>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-graphql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java-extended-scalars</artifactId>
-            <version>${graphql-extended.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -95,11 +85,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-testcontainers</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.graphql</groupId>
-            <artifactId>spring-graphql-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
