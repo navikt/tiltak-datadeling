@@ -41,8 +41,6 @@ spec:
     timeout: 1
     periodSeconds: 30
     failureThreshold: 10
-  ingresses:
-    - https://tiltak-datadeling.intern.dev.nav.no/
   strategy:
     type: RollingUpdate
   prometheus:
@@ -56,22 +54,3 @@ spec:
       destinations:
         - id: elastic
         - id: loki
-  azure:
-    application:
-      claims:
-        groups:
-          - id: '8322979a-a145-4799-8fa1-dba9578bfacd' # Testgruppe
-      enabled: true
-    sidecar:
-      enabled: true
-  accessPolicy:
-    inbound:
-      rules:
-        - application: wonderwalled-azure
-          namespace: aura
-          cluster: dev-gcp
-        - application: tiltak-admin
-          namespace: team-tiltak
-          cluster: dev-gcp
-        - application: tiltakshistorikk
-          namespace: team-mulighetsrommet

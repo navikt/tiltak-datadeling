@@ -16,11 +16,6 @@ spring:
         truststore: null
     listener:
       ack-mode: manual
-  graphql:
-    path: '/graphql'
-    graphiql:
-      enabled: true
-      path: '/graphiql'
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}

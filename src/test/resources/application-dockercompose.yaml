@@ -30,11 +30,6 @@ spring:
     name: tiltak-datadeling
   main:
     banner-mode: "off"
-  graphql:
-    path: '/graphql'
-    graphiql:
-      enabled: true
-      path: '/graphiql'
 management:
   endpoints:
     web:

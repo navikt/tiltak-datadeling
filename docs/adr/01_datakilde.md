@@ -1,5 +1,7 @@
 # 01 - Vi oppretter et konsument-API via ny applikasjon
 
+**Status:** Delvis erstattet av [ADR 04](04_fjerne_api.md). Appen finnes fortsatt, men API-et er fjernet.
+
 ## Kontekst
 
 Vår hovedkilde for data om avtaler er appen `tiltaksgjennomforing-api`. Når vi blir master for stadig flere tiltak,
