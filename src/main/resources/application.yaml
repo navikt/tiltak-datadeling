@@ -33,13 +33,6 @@ spring:
     name: tiltak-datadeling
   main:
     banner-mode: "off"
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${AZURE_OPENID_CONFIG_ISSUER}
-          jwk-set-uri: ${AZURE_OPENID_CONFIG_JWKS_URI}
-          audiences: ${AZURE_APP_CLIENT_ID}
 management:
   endpoints:
     web:
